@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum SeatStatus {
+  Available
+  Booked
+  Unavailable
+}
+enum TicketStatus {
+  Open
+  Resolved
+}
+enum OrderStatus {
+  Pending
+  Confirmed
+  Denied
+}
+model Customer{
+  id            String      @id
+  full_name     String
+  email         String   @unique
+  phone         String
+  password      String 
+  rank          Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  orders        Order[]
+}
+model Staff{
+  id             String     @id
+  full_name      String 
+  email          String     @unique
+  phone          String
+  password       String 
+  role           String
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  orders         Order[]
+  shifts         Shift[]
+  
+}
+model Order{
+  id             Int      @id @default(autoincrement())
+  customer_id    String
+  staff_id       String?
+  total_price    Float
+  status         OrderStatus
+  payment_method String
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  customer       Customer   @relation(fields: [customer_id], references: [id])
+  staff          Staff?     @relation(fields: [staff_id], references: [id])
+  tickets        Ticket[]
+}
+model Method{
+  id             Int        @id @default(autoincrement())
+  name           String
+  description    String
+}
+
+model Shift{
+  id             Int        @id @default(autoincrement())
+  staff_id       String
+  start_time     DateTime   @db.Time()
+  end_time       DateTime   @db.Time()
+  staff          Staff      @relation(fields: [staff_id], references: [id])
+}
+model Ticket{
+  id             Int        @id @default(autoincrement())
+  order_id       Int
+  pass_cccd      String
+  pass_name      String
+  price          Float
+  status         TicketStatus
+  seat_id        Int        @unique
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  order          Order      @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  seat           Seat       @relation(fields: [seat_id], references: [id])
+}
+model Seat{
+  id             Int        @id @default(autoincrement())
+  status         SeatStatus
+  trip_id        Int
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  ticket         Ticket?
+  trip           Trip       @relation(fields: [trip_id], references: [id])
+}
+model Trip{
+  id                Int        @id @default(autoincrement())
+  track             String
+  departure_station String
+  arrival_station   String
+  ETD               DateTime   @db.Time()
+  ETA               DateTime   @db.Time()
+  seats             Seat[]
+}
