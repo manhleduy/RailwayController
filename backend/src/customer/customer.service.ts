@@ -1,11 +1,48 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { CustomerModel } from "../../generated/prisma/models";
-
+import * as bcrypt from 'bcrypt';
+import { CreateInput } from "./dto/create.dto";
+import { LoginInput } from "./dto/login.dto";
 @Injectable()
 export class CustomerService{
     constructor( private readonly prisma: PrismaService){}
-    async deleteCustomer(id: string){
+    async create(input: CreateInput){
+    const { id, full_name, email, phone, password } = input;
+    const hashedPassword = await bcrypt.hash(password, 10);
+      return await this.prisma.customer.create({
+        data: {
+          id,
+          full_name,
+          email,
+          phone,
+          password: hashedPassword,
+          rank: 0,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+      });        
+    }
+
+    async login(input: LoginInput){
+        return await this.prisma.customer.findFirst({
+            where:{
+                AND: [
+                    {id: input.id},
+                    {email: input.email}
+                ]
+            },
+            select:{
+                id: true,
+                full_name: true,
+                email: true,
+                phone: true,
+                password: true
+            }
+        })
+    }
+
+    async delete(id: string){
         return await this.prisma.customer.delete({
             where: {
                 id

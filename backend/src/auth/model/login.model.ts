@@ -14,4 +14,7 @@ export class LoginModel {
   @Field()
   phone!: string;
 
+  @Field()
+  password!: string;
+
 }

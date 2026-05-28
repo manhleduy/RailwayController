@@ -13,10 +13,9 @@ export class CustomerResolver {
     
     
 
-
     @Mutation(() => String)
     deleteCustomer(@Args('id') id: string){
-        return this.customerService.deleteCustomer(id);
+        return this.customerService.delete(id);
     }    
     @Mutation(() => String)
     upRank(@Args('id') id: string){

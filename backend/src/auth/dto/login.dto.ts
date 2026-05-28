@@ -5,6 +5,10 @@ import { IsInt, IsString, MinLength } from "class-validator";
 export class LoginInput{
     @Field()
     @IsString()
+    id!: string;
+    
+    @Field()
+    @IsString()
     email!: string;
 
     @Field()
