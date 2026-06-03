@@ -27,7 +27,6 @@ export class SeatService{
                 status: "Available",
                 created_at: new Date(),
                 updated_at: new Date(),
-                seat_number: `A${Math.floor(Math.random() * 10000)}`
             }
         });
 

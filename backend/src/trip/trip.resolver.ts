@@ -6,7 +6,7 @@ import { TripService } from "./trip.service";
 import { SeatService } from "../seat/seat.service";
 import { SeatModel } from "../seat/model/seat.model";
 import { CreateTripInput } from "./dto/create.dto";
-@Resolver()
+@Resolver(()=> TripModel)
 export class TripResolver{
     constructor(
         private readonly tripService: TripService,
@@ -14,7 +14,7 @@ export class TripResolver{
     ){}
 
     @Query(()=>TripModel)
-    trip(@Args('id') id: number){
+    trip(@Args('id', {type: ()=> Number}) id: number){
         return this.tripService.getById(id);
     }
     @Query(()=>[TripModel])
@@ -22,17 +22,17 @@ export class TripResolver{
         return this.tripService.get();
     }
     @ResolveField(()=> SeatModel)
-    seats(@Args('id') id: number){
+    seats(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.getAllByTripId(id);
     }
 
     @Mutation(()=> TripModel)
-    create(@Args('data') data: CreateTripInput){
+    create(@Args('data', {type: ()=> CreateTripInput}) data: CreateTripInput){
         return this.tripService.create(data);
     }
 
     @Mutation(()=> TripModel)
-    delete(@Args('id') id: number){
+    delete(@Args('id', {type: ()=> Number}) id: number){
         return this.tripService.delete(id);
     }
 

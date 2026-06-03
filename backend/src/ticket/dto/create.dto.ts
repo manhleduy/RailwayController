@@ -1,7 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsInt } from "class-validator/types/decorator/typechecker/IsInt";
-import { IsString } from "class-validator/types/decorator/typechecker/IsString";
-
+import { IsInt, IsString } from "class-validator";
 @InputType()
 export class CreateTicketInput {
     @Field()

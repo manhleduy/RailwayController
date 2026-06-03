@@ -1,0 +1,162 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type LoginModel {
+  id: String!
+  full_name: String!
+  email: String!
+  phone: String!
+  password: String!
+}
+
+type TripModel {
+  id: Float!
+  track: String!
+  departure_station: String!
+  arrival_station: String!
+  ETD: DateTime!
+  ETA: DateTime!
+  seats(id: Float!): SeatModel!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type SeatModel {
+  status: String!
+  trip_id: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type TicketModel {
+  id: String!
+  pass_cccd: String!
+  pass_name: String!
+  order_id: Float!
+  seat_id: Float!
+  status: String!
+  price: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type OrderModel {
+  id: Float!
+  customer_id: String!
+  staff_id: String
+  payment_method: String!
+  total_price: Float!
+  status: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type CustomerModel {
+  id: String!
+  full_name: String!
+  email: String!
+  phone: String!
+  password: String!
+  rank: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type StatisticModel {
+  year: Float!
+  month: Float!
+  _sum: Float!
+  _count: Float!
+}
+
+type Query {
+  login(input: LoginInput!): LoginModel!
+  trip(id: Float!): TripModel!
+  trips: [TripModel!]!
+  seat(id: Float!): SeatModel!
+  seats(trip_id: Float!): [SeatModel!]!
+  ticket(id: Float!): TicketModel!
+  tickets(orderId: Float!): [TicketModel!]!
+  orders(id: String!): OrderModel!
+  customer(id: String!): CustomerModel!
+  statistic(data: StatisticInput!): [StatisticModel!]!
+}
+
+input LoginInput {
+  id: String!
+  email: String!
+  password: String!
+  role: String!
+}
+
+input StatisticInput {
+  year: Float!
+  id: String!
+}
+
+type Mutation {
+  signup(input: SignupInput!): LoginModel!
+  create(data: CreateSeatInput!): SeatModel!
+  delete(id: String!): String!
+  setSeatToAvailable(id: Float!): SeatModel!
+  setSeatToBooked(id: Float!): SeatModel!
+  setSeatToUnavailable(id: Float!): SeatModel!
+  acceptOrder(data: UpdateOrderInput!): OrderModel!
+  rejectOrder(data: UpdateOrderInput!): OrderModel!
+  deleteOrder(order_id: Float!): OrderModel!
+  updateTicket(data: UpdateTicketInput!): TicketModel!
+  addTicketToOrder(data: CreateTicketInput!): TicketModel!
+  removeTicketFromOrder(id: Float!): TicketModel!
+  upRank(id: String!): String!
+  updateInfor(data: UpdateCustomerInput!): CustomerModel!
+  resetPassword(data: ResetPasswordInput!): String!
+}
+
+input SignupInput {
+  id: String!
+  full_name: String!
+  email: String!
+  phone: String!
+  password: String!
+  role: String!
+}
+
+input CreateSeatInput {
+  trip_id: Float!
+}
+
+input UpdateOrderInput {
+  order_id: Float!
+  staff_id: String!
+}
+
+input UpdateTicketInput {
+  id: Float!
+  pass_cccd: String
+  pass_name: String
+  order_id: Float
+  seat_id: Float
+}
+
+input CreateTicketInput {
+  pass_cccd: String!
+  pass_name: String!
+  order_id: Float!
+  seat_id: Float!
+}
+
+input UpdateCustomerInput {
+  id: String!
+  full_name: String!
+  email: String!
+  phone: String!
+}
+
+input ResetPasswordInput {
+  id: String!
+  password: String!
+}

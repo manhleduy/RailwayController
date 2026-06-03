@@ -171,6 +171,40 @@ railwayControll/
 | **Recharts** | 2.12.7 | React charting library. Used for visualizing order statistics and booking analytics on dashboards. |
 | **Zod** | 4.4.3 | TypeScript-first schema validation library. Validates form inputs and API responses with type inference. |
 
+### Frontend Auth Implementation
+
+The current frontend work focuses on the login and signup experience. It uses two separate pages, keeps the backend response in Redux, and shows toast feedback without navigating to another screen after success.
+
+#### Key Frontend Files
+
+- `frontend/src/App.tsx` - React Router setup, Redux provider, and toast container
+- `frontend/src/pages/LoginPage.tsx` - Login page wrapper
+- `frontend/src/pages/SignupPage.tsx` - Signup page wrapper
+- `frontend/src/components/auth/AuthPageShell.tsx` - Shared two-column auth layout
+- `frontend/src/components/auth/AuthForm.tsx` - Controlled GraphQL auth form with loading and validation states
+- `frontend/src/components/auth/AuthStatusCard.tsx` - Redux snapshot of the saved auth data
+- `frontend/src/lib/api/graphql.ts` - Small GraphQL client wrapper around Axios
+- `frontend/src/lib/api/auth.ts` - Login and signup request helpers
+- `frontend/src/lib/store/authSlice.ts` - Redux slice for authentication state
+- `frontend/src/lib/store/store.ts` - Redux store with optional localStorage hydration
+- `frontend/src/lib/store/reduxHooks.ts` - Typed Redux hooks
+- `frontend/src/components/ui/card.tsx` - Card primitive for the auth layout
+- `frontend/src/components/ui/input.tsx` - Input primitive for the forms
+- `frontend/src/components/ui/select.tsx` - Select primitive for the role field
+
+#### Auth Flow
+
+1. The user opens `/login` or `/signup`.
+2. The form validates the input locally with `zod`.
+3. The app sends a GraphQL request to the backend auth resolver.
+4. The returned user data is normalized and stored in Redux.
+5. A `react-hot-toast` message confirms the result.
+6. The page stays in place so future dashboard work can be added later without changing this flow.
+
+#### Environment Variable
+
+- `VITE_GRAPHQL_URL` - Optional full GraphQL endpoint. Defaults to `http://localhost:3000/graphql`.
+
 ---
 
 ## Frontend Components Status

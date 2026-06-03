@@ -10,7 +10,6 @@ export class OrderService {
 
     constructor(
         private readonly prisma: PrismaService,
-        private readonly seatService: TicketService
     ){}
     async getAll(){
         return await this.prisma.order.findMany();
@@ -46,7 +45,7 @@ export class OrderService {
     }
     
     //create ordre and the array of the tickets in the same transaction
-    async create(data: CreateOrderInput) {
+    /*async create(data: CreateOrderInput) {
         return await this.prisma.$transaction(async (tx) => {
 
             const order = await tx.order.create({
@@ -76,7 +75,7 @@ export class OrderService {
         });
 
         
-    }
+    }*/
     async delete(id: number){
         return await this.prisma.order.delete({
             where:{

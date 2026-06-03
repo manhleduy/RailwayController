@@ -17,7 +17,7 @@ export class AuthResolver {
   ) {}
 
   @Query(()=>LoginModel)
-  async login(@Args('input') input: LoginInput){
+  async login(@Args('input', {type: ()=> LoginInput}) input: LoginInput){
     
       const {role} = input;
       let user: LoginModel | null;
@@ -31,14 +31,15 @@ export class AuthResolver {
       if(!user){
         throw new Error('User not found');
       }
-      if(brcypt.compare(input.password, user.password)){
+      if(!brcypt.compare(input.password, user.password)){
         throw new Error("Invalid password");
+        
       }
       return user;
   }
 
-  @Mutation()
-  async signup(@Args('input') input: SignupInput){
+  @Mutation(()=> LoginModel)
+  async signup(@Args('input', {type: ()=> SignupInput}) input: SignupInput){
     const {role} = input;
     if (role === 'CUSTOMER') {
       return this.customerService.create(input);

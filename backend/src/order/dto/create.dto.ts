@@ -8,7 +8,7 @@ export class CreateOrderInput{
     customer_id!: string;
     
     @Field({nullable: true})
-    tickets!: CreateTicketInput[];
+    tickets!: typeof CreateTicketInput[];
 
     @Field()
     payment_method!: string;

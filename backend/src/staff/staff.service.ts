@@ -26,6 +26,18 @@ export class StaffService{
                 }
             })
         }
+    async create(input: CreateInput){
+        const hashedPassword = await bcrypt.hash(input.password, 10);
+        return await this.prisma.staff.create({
+            data: {
+                ...input,
+                password: hashedPassword,
+                created_at: new Date(),
+                updated_at: new Date(),
+                role: "STAFF"
+            }
+        });
+    }
     
     
 }

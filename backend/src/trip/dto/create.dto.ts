@@ -1,7 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsDate } from "class-validator/types/decorator/typechecker/IsDate";
-import { IsString } from "class-validator/types/decorator/typechecker/IsString";
-
+import { IsDate, IsString } from "class-validator";
 @InputType()
 export class CreateTripInput{
 

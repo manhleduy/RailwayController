@@ -14,40 +14,40 @@ export class SeatResolver{
     ){}
 
     @Query(()=> SeatModel)
-    seat(@Args('id') id: number){
+    seat(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.get(id);
     }
     @Query(()=>[SeatModel])
-    seats(@Args('trip_id') trip_id: number){
+    seats(@Args('trip_id', {type: ()=> Number}) trip_id: number){
         return this.seatService.getAllByTripId(trip_id);
     }
 
 
     @Query(()=> TicketModel)
-    ticket(@Args('id') id: number){
+    ticket(@Args('id', {type: ()=> Number}) id: number){
         return this.ticketService.findBySeatId(id);
     }
 
     
     @Mutation(()=> SeatModel)
-    setSeatToAvailable(@Args('id') id: number){
+    setSeatToAvailable(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.updateSeat(id, SeatStatus.Available );
     }
     @Mutation(()=> SeatModel)
-    setSeatToBooked(@Args('id') id: number){
+    setSeatToBooked(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.updateSeat(id, SeatStatus.Booked );
     }
     @Mutation(()=> SeatModel)
-    setSeatToUnavailable(@Args('id') id: number){
+    setSeatToUnavailable(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.updateSeat(id, SeatStatus.Unavailable ); 
     }
 
     @Mutation(()=> SeatModel)
-    create(@Args('data') data: CreateSeatInput){
+    create(@Args('data', {type: ()=> CreateSeatInput}) data: CreateSeatInput){
         return this.seatService.create(data);
     }
     @Mutation(()=> SeatModel)
-    delete(@Args('id') id: number){
+    delete(@Args('id', {type: ()=> Number}) id: number){
         return this.seatService.delete(id);
     }
 
