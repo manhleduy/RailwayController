@@ -1,12 +1,20 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
-import { AcceptOrderInput } from "./dto/accept.dto";
 import { CreateOrderInput } from "./dto/create.dto";
 import { StatisticModel } from "./model/statistic.model";
+import { TicketService } from "../ticket/ticket.service";
+import { UpdateOrderInput } from "./dto/update.dto";
+import { OrderStatus, TicketStatus } from "@prisma/client";
 @Injectable()
 export class OrderService {
 
-    constructor(private readonly prisma: PrismaService){}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly seatService: TicketService
+    ){}
+    async getAll(){
+        return await this.prisma.order.findMany();
+    }
     async findAllOrderByUserId(data: string){
         const orders = await this.prisma.order.findMany({
             where: {
@@ -46,7 +54,7 @@ export class OrderService {
                     customer_id: data.customer_id,
                     payment_method: data.payment_method,
                     total_price: data.tickets.length * 10000,
-                    status: "Pending",
+                    status: OrderStatus.Pending,
                 }
             });
 
@@ -59,7 +67,7 @@ export class OrderService {
                             order_id: order.id,
                             seat_id: input.seat_id,
                             price: 10000,
-                            status: "Open",
+                            status: TicketStatus.Open
                         }
                     })
                 )
@@ -69,36 +77,24 @@ export class OrderService {
 
         
     }
-    async deleteOne(id: number){
+    async delete(id: number){
         return await this.prisma.order.delete({
             where:{
                 id
             }
         })
     }
-    async acceptOrder(data: AcceptOrderInput){
+    async updateOrder(data: UpdateOrderInput){
         return this.prisma.order.update({
-            where: {
+            where:{
                 id: data.order_id
             },
-            data: {
+            data:{
                 staff_id: data.staff_id,
-                status: "Confirmed"
+                status: data.status
             }
         })
     }
-    async deniedOrder(data: AcceptOrderInput){
-        return this.prisma.order.update({
-            where: {
-                id: data.order_id
-            },
-            data: {
-                staff_id: data.staff_id,
-                status: "Denied"
-            }   
-        })
-        return "order denied successfully";
-    }   
     
-    
+      
 }

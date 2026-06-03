@@ -6,26 +6,7 @@ import { UpdateTicketInput } from "./dto/update.dto";
 @Injectable()
 export class TicketService{
     constructor( private readonly prisma: PrismaService){}
-
-    async create(createTicketInput: CreateTicketInput[]){
-        return await this.prisma.$transaction(
-            createTicketInput.map((input:any) => 
-                this.prisma.ticket.create({
-                    data: {
-                        pass_cccd: input.pass_cccd,
-                        pass_name: input.pass_name,
-                        order_id: input.order_id,
-                        seat_id: input.seat_id,
-                        price: 10000,
-                        status: "Open",
-                        created_at: new Date(),
-                        updated_at: new Date()
-                    }
-                })
-            )
-        );
     
-    }
     async findAllByOrderId(orderId: number){
         const tickets = await this.prisma.ticket.findMany({
             where: {
@@ -42,12 +23,21 @@ export class TicketService{
         });
         return ticket;
     }
+    async findBySeatId(seatId: number){
+        const ticket = await this.prisma.ticket.findFirst({
+            where: {
+                seat_id: seatId
+            }
+        })
+        return ticket;
+    }
     async deleteOne(id: number){
         const ticket = await this.prisma.ticket.delete({
             where: {
                 id: id
             }
         })
+        return ticket;
     }
     async updateOne(data: UpdateTicketInput){
         const ticket = await this.prisma.ticket.update({
@@ -62,6 +52,18 @@ export class TicketService{
                 updated_at: new Date()
             }
         });
+        return ticket;
+    }
+    async create(data: CreateTicketInput){
+        return await this.prisma.ticket.create({
+            data:{
+                ...data,
+                price: 10000,
+                status: "Open",
+                created_at: new Date(),
+                updated_at: new Date()
+            }
+        })
     }
 
 }

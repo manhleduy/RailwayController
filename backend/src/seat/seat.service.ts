@@ -13,6 +13,13 @@ export class SeatService{
         });
 
     }
+    async getAllByTripId(trip_id: number){
+        return await this.prisma.seat.findMany({
+            where:{
+                trip_id: trip_id
+            }
+        })
+    }
     async create(data: CreateSeatInput) {
         return await this.prisma.seat.create({
             data: {
@@ -36,8 +43,15 @@ export class SeatService{
                 updated_at: new Date()
             }
         });
-    
-
     }
+
+    async delete(id: number){
+        return await this.prisma.seat.delete({
+            where:{
+                id: id
+            }
+        })
+    }
+    
 
 }

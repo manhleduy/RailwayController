@@ -8,23 +8,7 @@ export class StaffService{
     constructor(
         private readonly prisma: PrismaService
     ){}
-    async create(input: CreateInput){
-        const { id, full_name, email, phone, password } = input;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        return await this.prisma.staff.create({
-            data: {
-                id,
-                full_name,
-                email,
-                phone,
-                password: hashedPassword,
-                role: 'STAFF',
-                created_at: new Date(),
-                updated_at: new Date()
-            }
-        })
-    }
-
+    
     async login(input: LoginInput){
             return await this.prisma.customer.findFirst({
                 where:{

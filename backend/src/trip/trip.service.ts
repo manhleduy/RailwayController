@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import {PrismaService } from "../../prisma/prisma.service";
 import { TripModel } from "../../generated/prisma/models";
+import { CreateTripInput } from "./dto/create.dto";
 @Injectable()
 export class TripService{
     constructor(private readonly prisma: PrismaService){}
@@ -16,11 +17,19 @@ export class TripService{
         });
     }
     
-    create(data: TripModel){
+    create(data: CreateTripInput){
         return this.prisma.trip.create({
             data
         });
         
     }
+    delete(id: number){
+        return this.prisma.trip.findFirst({
+            where:{
+                id
+            }
+        })
+    }
+    
     
 }

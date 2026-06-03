@@ -15,7 +15,7 @@ export class OrderResolver{
     statistic(@Args('id') id: string, @Args('year') year: number){
         return this.orderService.userOrderStatisticPerMonth(id, year);
     }
-
+    
     
 
     

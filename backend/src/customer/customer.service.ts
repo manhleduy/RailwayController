@@ -4,6 +4,7 @@ import { CustomerModel } from "../../generated/prisma/models";
 import * as bcrypt from 'bcrypt';
 import { CreateInput } from "./dto/create.dto";
 import { LoginInput } from "./dto/login.dto";
+import { UpdateCustomerInput } from "./dto/update.dto";
 @Injectable()
 export class CustomerService{
     constructor( private readonly prisma: PrismaService){}
@@ -61,7 +62,8 @@ export class CustomerService{
             }
         })
     }  
-    updateInfor(id: string, full_name: string, email: string, phone: string){
+    updateInfor(data: UpdateCustomerInput){
+        const { id, full_name, email, phone } = data;
         return this.prisma.customer.update({
             where: {
                 id
