@@ -14,7 +14,6 @@ export class OrderService {
             }
         });
         return orders;
-
     }
     async userOrderStatisticPerMonth(id: string, year: number){
         let statis =[1,2,3,4,5,6,7,8,9,10,11,12]
