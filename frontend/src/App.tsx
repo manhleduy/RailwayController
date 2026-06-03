@@ -3,16 +3,21 @@ import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 
 import { store } from './lib/store/store';
+import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
+import OrderPage from './pages/OrderPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/order" element={<OrderPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

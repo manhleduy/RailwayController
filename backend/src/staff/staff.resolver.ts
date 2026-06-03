@@ -14,7 +14,7 @@ export class StaffResolver{
         private readonly seatService: SeatService
     ){}
 
-    @Query(() => [OrderModel])
+    @Query(() => [OrderModel], { name: 'allOrders' })
     orders(){
         return this.orderService.getAll();
     }

@@ -1,7 +1,7 @@
-import { type FormEvent, useMemo, useState } from 'react';
+import { type FormEvent, useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { LoaderCircle, LogIn, UserPlus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
@@ -76,8 +76,9 @@ function toStoredUser(
 }
 
 export function AuthForm({ mode }: AuthFormProps) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useAppSelector((state) => state.auth);
   const [values, setValues] = useState<AuthFormValues>(initialValues);
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof AuthFormValues, string>>
@@ -86,6 +87,12 @@ export function AuthForm({ mode }: AuthFormProps) {
   const isSignup = mode === 'signup';
   const submitLabel = isSignup ? 'Create account' : 'Log in';
   const SubmitIcon = isSignup ? UserPlus : LogIn;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const fieldGroups = useMemo(
     () => [
@@ -281,7 +288,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               <option value="STAFF">Staff</option>
             </Select>
             <p className="text-xs leading-5 text-slate-500">
-              Choose which backend branch should handle the request.
+              Customer is the default path. Use staff only for internal access.
             </p>
             {fieldErrors.role ? (
               <p className="text-xs font-medium text-red-600">{fieldErrors.role}</p>
@@ -336,4 +343,3 @@ export function AuthForm({ mode }: AuthFormProps) {
     </div>
   );
 }
-

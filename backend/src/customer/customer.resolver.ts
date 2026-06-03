@@ -25,23 +25,22 @@ export class CustomerResolver {
     
 
 
-    @Query(()=> [OrderModel])
+    @Query(()=> [OrderModel], { name: 'customerOrders' })
     orders(@Args('id', {type: ()=> String}) id: string){
         return this.orderService.findAllOrderByUserId(id);
     }
     
 
+    @Mutation(()=> OrderModel)
+    createOrder(@Args('data', {type: ()=> CreateOrderInput}) data: CreateOrderInput){
+        return this.orderService.create(data);
+    }
+    
 
     @Mutation(()=> OrderModel)
     deleteOrder(@Args('order_id', {type: ()=> Number}) order_id: number){
         return this.orderService.delete(order_id);
     }
-
-    /*@Mutation(()=>OrderModel)
-    createOrder(@Args('data', {type: ()=> CreateOrderInput}) data: CreateOrderInput){
-        
-        return this.orderService.create(data);
-    }*/
 
 
     @Mutation(()=>TicketModel)
