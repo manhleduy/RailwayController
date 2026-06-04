@@ -80,46 +80,15 @@ const paymentOptions: Array<{
 
 const seatOptions = Array.from({ length: MAX_SEATS }, (_, index) => index + 1);
 
-const initialTickets: TicketRecord[] = [
-  {
-    id: 1,
-    order_id: 48021,
-    pass_cccd: '079204123456',
-    pass_name: 'Nguyen Anh Khoa',
-    price: TICKET_PRICE,
-    seat_id: 4,
-    created_at: '2026-06-03T02:15:00.000Z',
-    updated_at: '2026-06-03T02:15:00.000Z',
-  },
-  {
-    id: 2,
-    order_id: 48021,
-    pass_cccd: '079209876543',
-    pass_name: 'Tran My Linh',
-    price: TICKET_PRICE,
-    seat_id: 7,
-    created_at: '2026-06-03T02:15:00.000Z',
-    updated_at: '2026-06-03T02:15:00.000Z',
-  },
-  {
-    id: 3,
-    order_id: 48021,
-    pass_cccd: '079201110022',
-    pass_name: 'Le Minh Tuan',
-    price: TICKET_PRICE,
-    seat_id: 10,
-    created_at: '2026-06-03T02:15:00.000Z',
-    updated_at: '2026-06-03T02:15:00.000Z',
-  },
-];
+const initialTickets: TicketRecord[] = [];
 
 const initialOrder: OrderRecord = {
-  id: 48021,
-  customer_id: 'CUST-2026-0142',
-  total_price: initialTickets.length * TICKET_PRICE,
-  payment_method: 'Credit Card',
-  created_at: '2026-06-03T02:15:00.000Z',
-  updated_at: '2026-06-03T02:22:00.000Z',
+  id: 0,
+  customer_id: '',
+  total_price: 0,
+  payment_method: paymentOptions[0].value,
+  created_at: nowIso(),
+  updated_at: nowIso(),
 };
 
 const currencyFormatter = new Intl.NumberFormat('vi-VN', {

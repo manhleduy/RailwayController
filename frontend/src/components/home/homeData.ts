@@ -21,10 +21,10 @@ import type {
 } from './homeTypes';
 
 export const navLinks: NavLink[] = [
-  { label: 'Home', href: '#home' },
-  { label: 'Order', href: '#order' },
-  { label: 'Trip', href: '#trip' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/home' },
+  { label: 'Order', href: '/order' },
+  { label: 'Trip', href: '/trip' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const bookingInitialValues: BookingState = {

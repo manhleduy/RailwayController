@@ -6,6 +6,7 @@ import { store } from './lib/store/store';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import OrderPage from './pages/OrderPage';
+import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 
@@ -15,6 +16,7 @@ function AppRoutes() {
       <Route path="/" element={<HomePage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/order" element={<OrderPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
