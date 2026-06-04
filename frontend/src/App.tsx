@@ -11,6 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import RecentActivityPage from './pages/RecentActivityPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import TripsPage from './pages/TripsPage';
 
 function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ function AppRoutes() {
       <Route path="/" element={<HomePage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/order" element={<OrderPage />} />
+      <Route path="/trips" element={<TripsPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/activity" element={<RecentActivityPage />} />

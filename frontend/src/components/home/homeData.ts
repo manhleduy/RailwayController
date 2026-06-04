@@ -23,7 +23,7 @@ import type {
 export const navLinks: NavLink[] = [
   { label: 'Home', href: '/home' },
   { label: 'Order', href: '/order' },
-  { label: 'Trip', href: '/trip' },
+  { label: 'Trips', href: '/trips' },
   { label: 'Contact', href: '/contact' },
 ];
 
