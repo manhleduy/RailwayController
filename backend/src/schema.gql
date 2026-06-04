@@ -81,8 +81,10 @@ type Query {
   seats(trip_id: Float!): [SeatModel!]!
   ticket(id: Float!): TicketModel!
   tickets(orderId: Float!): [TicketModel!]!
-  orders(id: String!): OrderModel!
+  allOrders: [OrderModel!]!
   customer(id: String!): CustomerModel!
+  customerOrders(id: String!): [OrderModel!]!
+  ordersByCustomerId(id: String!): [OrderModel!]!
   statistic(data: StatisticInput!): [StatisticModel!]!
 }
 
@@ -94,7 +96,7 @@ input LoginInput {
 }
 
 input StatisticInput {
-  year: Float!
+  year: Int!
   id: String!
 }
 
@@ -107,6 +109,7 @@ type Mutation {
   setSeatToUnavailable(id: Float!): SeatModel!
   acceptOrder(data: UpdateOrderInput!): OrderModel!
   rejectOrder(data: UpdateOrderInput!): OrderModel!
+  createOrder(data: CreateOrderInput!): OrderModel!
   deleteOrder(order_id: Float!): OrderModel!
   updateTicket(data: UpdateTicketInput!): TicketModel!
   addTicketToOrder(data: CreateTicketInput!): TicketModel!
@@ -134,12 +137,10 @@ input UpdateOrderInput {
   staff_id: String!
 }
 
-input UpdateTicketInput {
-  id: Float!
-  pass_cccd: String
-  pass_name: String
-  order_id: Float
-  seat_id: Float
+input CreateOrderInput {
+  customer_id: String!
+  tickets: [CreateTicketInput!]
+  payment_method: String!
 }
 
 input CreateTicketInput {
@@ -147,6 +148,14 @@ input CreateTicketInput {
   pass_name: String!
   order_id: Float!
   seat_id: Float!
+}
+
+input UpdateTicketInput {
+  id: Float!
+  pass_cccd: String
+  pass_name: String
+  order_id: Float
+  seat_id: Float
 }
 
 input UpdateCustomerInput {

@@ -26,7 +26,7 @@ The Railway Controller is a comprehensive platform that streamlines railway tick
 railwayControll/
 ├── backend/                          (NestJS + GraphQL + Prisma)
 │   ├── src/
-│   │   ├── auth/                    (Authentication module)
+│   │   ├── auth/                    (Authentication)
 │   │   │   ├── auth.module.ts
 │   │   │   ├── auth.service.ts
 │   │   │   ├── auth.resolver.ts
@@ -35,7 +35,7 @@ railwayControll/
 │   │   │   │   └── signup.dto.ts
 │   │   │   └── model/
 │   │   │       └── login.model.ts
-│   │   ├── customer/                (Customer management)
+│   │   ├── customer/                (Customer Management)
 │   │   │   ├── customer.module.ts
 │   │   │   ├── customer.service.ts
 │   │   │   ├── customer.resolver.ts
@@ -48,7 +48,7 @@ railwayControll/
 │   │   │   │   └── uprank.dto.ts
 │   │   │   └── model/
 │   │   │       └── customer.model.ts
-│   │   ├── ticket/                  (Ticket management)
+│   │   ├── ticket/                  (Ticket Management)
 │   │   │   ├── ticket.module.ts
 │   │   │   ├── ticket.service.ts
 │   │   │   ├── ticket.resolver.ts
@@ -57,23 +57,26 @@ railwayControll/
 │   │   │   │   └── update.dto.ts
 │   │   │   └── model/
 │   │   │       └── ticket.model.ts
-│   │   ├── order/                   (Order management)
+│   │   ├── order/                   (Order Management)
 │   │   │   ├── order.module.ts
 │   │   │   ├── order.service.ts
 │   │   │   ├── order.resolver.ts
 │   │   │   ├── dto/
 │   │   │   │   ├── create.dto.ts
-│   │   │   │   └── accept.dto.ts
+│   │   │   │   ├── update.dto.ts
+│   │   │   │   └── statistic.dto.ts
 │   │   │   └── model/
 │   │   │       ├── order.model.ts
 │   │   │       └── statistic.model.ts
-│   │   ├── trip/                    (Trip management)
+│   │   ├── trip/                    (Trip Management)
 │   │   │   ├── trip.module.ts
 │   │   │   ├── trip.service.ts
 │   │   │   ├── trip.resolver.ts
+│   │   │   ├── dto/
+│   │   │   │   └── create.dto.ts
 │   │   │   └── model/
 │   │   │       └── trip.model.ts
-│   │   ├── seat/                    (Seat management)
+│   │   ├── seat/                    (Seat Management)
 │   │   │   ├── seat.module.ts
 │   │   │   ├── seat.service.ts
 │   │   │   ├── seat.resolver.ts
@@ -82,39 +85,83 @@ railwayControll/
 │   │   │   │   └── update.dto.ts
 │   │   │   └── model/
 │   │   │       └── seat.model.ts
-│   │   ├── staff/                   (Staff management)
+│   │   ├── staff/                   (Staff Management)
 │   │   │   ├── staff.module.ts
 │   │   │   ├── staff.service.ts
 │   │   │   ├── staff.resolver.ts
 │   │   │   └── dto/
 │   │   │       ├── create.dto.ts
-│   │   │       └── login.dto.ts
+│   │   │       ├── login.dto.ts
+│   │   │       └── model.update.dto.ts
+│   │   ├── auth.payload.ts          (Auth Response Payload)
+│   │   ├── auth.service.ts          (Main Auth Service)
+│   │   ├── auth.resolver.ts         (Main Auth Resolver)
+│   │   ├── login.input.ts           (Login Input Type)
+│   │   ├── signup.input.ts          (Signup Input Type)
+│   │   ├── schema.gql               (Generated GraphQL Schema)
 │   │   ├── main.ts
 │   │   ├── app.module.ts
 │   │   ├── app.service.ts
 │   │   └── app.controller.ts
-│   ├── test/                        (E2E tests)
-│   ├── prisma/                      (Database schema)
-│   ├── dist/                        (Compiled output)
-│   ├── generated/                   (Generated files)
+│   ├── test/                        (E2E Tests)
+│   ├── prisma/                      (Database Schema)
+│   ├── dist/                        (Compiled Output)
+│   ├── generated/                   (Generated Files)
 │   ├── .env
 │   ├── package.json
 │   ├── tsconfig.json
 │   ├── nest-cli.json
 │   └── README.md
 │
-├── frontend/                         (React + Vite + TypeScript)
+├── frontend/                         (React + Vite + TypeScript + Tailwind)
 │   ├── src/
+│   │   ├── pages/                   (Page Components)
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── SignupPage.tsx
+│   │   │   ├── OrderPage.tsx
+│   │   │   └── DashboardPage.tsx
 │   │   ├── components/
-│   │   │   └── ui/                  (UI components)
-│   │   │       ├── button.tsx
-│   │   │       ├── label.tsx
-│   │   │       ├── textarea.tsx
-│   │   │       ├── separator.tsx
-│   │   │       ├── field.tsx
-│   │   │       ├── dropdown-menu.tsx
-│   │   │       └── hover-card.tsx
+│   │   │   ├── ui/                  (Base UI Components)
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── label.tsx
+│   │   │   │   ├── input.tsx
+│   │   │   │   ├── textarea.tsx
+│   │   │   │   ├── separator.tsx
+│   │   │   │   ├── field.tsx
+│   │   │   │   ├── dropdown-menu.tsx
+│   │   │   │   ├── hover-card.tsx
+│   │   │   │   ├── select.tsx
+│   │   │   │   └── card.tsx
+│   │   │   ├── auth/                (Auth Components)
+│   │   │   │   ├── AuthPageShell.tsx
+│   │   │   │   ├── AuthForm.tsx
+│   │   │   │   └── AuthStatusCard.tsx
+│   │   │   ├── home/                (Home Page Components)
+│   │   │   │   ├── HomeHeader.tsx
+│   │   │   │   ├── HeroBookingSection.tsx
+│   │   │   │   ├── HomeAlertBanner.tsx
+│   │   │   │   ├── ServiceGrid.tsx
+│   │   │   │   ├── LiveStationBoard.tsx
+│   │   │   │   ├── FeedbackMarquee.tsx
+│   │   │   │   ├── HomeSectionHeading.tsx
+│   │   │   │   ├── HomeSocialLink.tsx
+│   │   │   │   ├── HomeFooter.tsx
+│   │   │   │   ├── homeData.ts
+│   │   │   │   └── homeTypes.ts
+│   │   │   └── dashboard/           (Dashboard Components)
+│   │   │       ├── DashboardView.tsx
+│   │   │       └── withDashboard.tsx
 │   │   ├── lib/
+│   │   │   ├── api/                 (API Layer)
+│   │   │   │   ├── graphql.ts
+│   │   │   │   ├── auth.ts
+│   │   │   │   └── orders.ts
+│   │   │   ├── store/               (Redux Store)
+│   │   │   │   ├── store.ts
+│   │   │   │   ├── authSlice.ts
+│   │   │   │   ├── authTypes.ts
+│   │   │   │   └── reduxHooks.ts
 │   │   │   └── utils.ts
 │   │   ├── App.tsx
 │   │   ├── main.tsx
@@ -125,10 +172,14 @@ railwayControll/
 │   ├── tsconfig.json
 │   ├── components.json
 │   ├── eslint.config.js
+│   ├── setup.js
 │   └── README.md
 │
-├── .git/                            (Git repository)
-├── test_create.json                 (Test data file)
+├── .git/                            (Git Repository)
+├── test_create.json
+├── create_dirs.bat
+├── init
+├── graph
 └── .gitignore
 ```
 
