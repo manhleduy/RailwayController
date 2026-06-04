@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Menu, TrainFront, X } from 'lucide-react';
 
+import { useAppSelector } from '@/lib/store/reduxHooks';
+import { UserMenu } from './UserMenu';
 import type { NavLink } from './homeTypes';
 
 export function HomeHeader({
@@ -16,6 +18,7 @@ export function HomeHeader({
   isAuthenticated?: boolean;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
@@ -51,13 +54,17 @@ export function HomeHeader({
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            to={isAuthenticated ? dashboardHref : loginHref}
-            className="hidden items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 sm:inline-flex"
-          >
-            {isAuthenticated ? 'Dashboard' : 'Login / Sign up'}
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
+          {isAuthenticated && user ? (
+            <UserMenu user={user} />
+          ) : (
+            <Link
+              to={loginHref}
+              className="hidden items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 sm:inline-flex"
+            >
+              Login / Sign up
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
+          )}
 
           <button
             type="button"
@@ -88,14 +95,43 @@ export function HomeHeader({
                 {link.label}
               </a>
             ))}
-            <Link
-              to={isAuthenticated ? dashboardHref : loginHref}
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950"
-            >
-              {isAuthenticated ? 'Dashboard' : 'Login / Sign up'}
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
+            {!isAuthenticated ? (
+              <Link
+                to={loginHref}
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950"
+              >
+                Login / Sign up
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            ) : user ? (
+              <div className="mt-2 rounded-2xl bg-slate-900/50 p-3 border border-white/10">
+                <p className="text-sm font-medium text-white">{user.full_name}</p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400/20 px-3 py-2 text-sm font-semibold text-emerald-300 hover:bg-emerald-400/30"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-400/20 px-3 py-2 text-sm font-semibold text-sky-300 hover:bg-sky-400/30"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/activity"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-400/20 px-3 py-2 text-sm font-semibold text-amber-300 hover:bg-amber-400/30"
+                  >
+                    Activity
+                  </Link>
+                </div>
+              </div>
+            ) : null}
           </nav>
         </div>
       ) : null}

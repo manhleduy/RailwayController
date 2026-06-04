@@ -16,6 +16,22 @@ interface GraphQLResponse<TData> {
   errors?: GraphQLErrorShape[];
 }
 
+export class ApiError extends Error {
+  status?: number;
+
+  constructor(message: string, status?: number, cause?: unknown) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    // Preserve original error as cause when available
+    // TypeScript's Error doesn't have a standard cause in some runtimes, but modern V8 supports it.
+    try {
+      // @ts-ignore
+      this.cause = cause;
+    } catch {}
+  }
+}
+
 function extractErrorMessage(error: unknown) {
   if (axios.isAxiosError(error)) {
     const messageFromGraphQL = error.response?.data?.errors?.[0]?.message;
@@ -40,20 +56,32 @@ export async function requestGraphQL<TData, TVariables>(
     });
 
     if (response.data.errors?.length) {
-      throw new Error(
+      throw new ApiError(
         response.data.errors
           .map((item) => item.message)
           .filter(Boolean)
-          .join(' • ')
+          .join(' • '),
+        response.status
       );
     }
 
     if (!response.data.data) {
-      throw new Error('GraphQL response did not contain data.');
+      throw new ApiError('GraphQL response did not contain data.', response.status);
     }
 
     return response.data.data;
   } catch (error) {
-    throw new Error(extractErrorMessage(error), { cause: error });
+    if (axios.isAxiosError(error)) {
+      const message = extractErrorMessage(error);
+      const status = error.response?.status;
+      throw new ApiError(message, status, error);
+    }
+
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    const message = extractErrorMessage(error);
+    throw new ApiError(message, undefined, error);
   }
 }

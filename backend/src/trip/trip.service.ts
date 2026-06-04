@@ -9,6 +9,7 @@ export class TripService{
     get(){
         return this.prisma.trip.findMany();
     }
+    
     getById(id: number){
         return this.prisma.trip.findFirst({
             where:{

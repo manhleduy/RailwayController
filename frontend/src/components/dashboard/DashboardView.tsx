@@ -10,6 +10,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ApiErrorView, { ApiErrorViewProps } from '@/components/apiError/Error';
 
 import type { DashboardInjectedProps } from './withDashboard';
 
@@ -125,6 +126,7 @@ export function DashboardView({
   dashboard,
   loading,
   error,
+  errorStatus,
   reload,
   role,
   customerId,
@@ -169,27 +171,10 @@ export function DashboardView({
   }
 
   if (error) {
-    return (
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-[2rem] border border-rose-400/20 bg-rose-400/10 p-8 text-rose-50">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-200/80">
-            Dashboard error
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            We could not load the customer dashboard.
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-rose-50/80">{error}</p>
-          <button
-            type="button"
-            onClick={reload}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <RefreshCcw className="size-4" aria-hidden="true" />
-            Try again
-          </button>
-        </div>
-      </section>
-    );
+    // Use centralized API error view for clearer handling of HTTP statuses
+    // Lazy import to keep bundle small when not used
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return <ApiErrorView status={errorStatus} message={error} reload={reload} context="dashboard" />;
   }
 
   if (!dashboard || !dashboard.customer) {
@@ -314,7 +299,7 @@ export function DashboardView({
           />
           <MetricCard
             title="Last sync"
-            value={dashboard.orders[0] ? 'Live' : 'Idle'}
+                    value={orders[0] ? 'Live' : 'Idle'}
             description="The dashboard is hydrated from the GraphQL backend."
             icon={Clock3}
           />

@@ -32,6 +32,31 @@ export class SeatService{
 
     
     }
+    async statisticsByTripId(trip_id: number){
+        return await this.prisma.seat.groupBy({
+            by: ['status'],
+            where: {
+                trip_id: trip_id
+            },
+            _count:{
+                id: true
+            },
+            _sum: {
+                id: true
+            }
+        })
+    }
+    async statistic(){
+        return await this.prisma.seat.groupBy({
+            by: ['status'],
+            _count:{
+                id: true
+            },
+            _sum: {
+                id: true
+            }
+        })
+    }
     async updateSeat(id: number, status: string){
         return await this.prisma.seat.update({
             where: {

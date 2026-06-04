@@ -6,7 +6,9 @@ import { UpdateTicketInput } from "./dto/update.dto";
 @Injectable()
 export class TicketService{
     constructor( private readonly prisma: PrismaService){}
-    
+    async findAll(){
+        return await this.prisma.ticket.findMany();
+    }
     async findAllByOrderId(orderId: number){
         const tickets = await this.prisma.ticket.findMany({
             where: {
@@ -62,6 +64,31 @@ export class TicketService{
                 status: "Open",
                 created_at: new Date(),
                 updated_at: new Date()
+            }
+        })
+    }
+    async statistic(){
+        return await this.prisma.ticket.groupBy({
+            by: ['status'],
+            _count:{
+                id: true
+            },
+            _sum: {
+                id: true
+            }
+        })
+    }
+    async statisticWithOrderId(id: number){
+        return await this.prisma.ticket.groupBy({
+            by:[ 'status'],
+            where:{
+                order_id: id
+            },
+            _count:{
+                id: true
+            },
+            _sum:{
+                id: true
             }
         })
     }

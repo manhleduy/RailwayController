@@ -8,6 +8,7 @@ export interface DashboardInjectedProps {
   dashboard: CustomerDashboardSnapshot | null;
   loading: boolean;
   error: string | null;
+  errorStatus?: number | null;
   reload: () => void;
   role: AuthRole | null;
   customerId: string | null;
@@ -22,6 +23,7 @@ export function withDashboard<P extends object>(
     const [dashboard, setDashboard] = useState<CustomerDashboardSnapshot | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [errorStatus, setErrorStatus] = useState<number | null>(null);
     const [refreshIndex, setRefreshIndex] = useState(0);
 
     const customerId = user?.id ?? null;
@@ -69,6 +71,10 @@ export function withDashboard<P extends object>(
               ? requestError.message
               : 'Failed to load dashboard data.'
           );
+          // capture status when available
+          // requestGraphQL now throws ApiError with optional `status`
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setErrorStatus((requestError as any)?.status ?? null);
         } finally {
           if (active) {
             setLoading(false);
@@ -89,6 +95,7 @@ export function withDashboard<P extends object>(
         dashboard={dashboard}
         loading={loading}
         error={error}
+        errorStatus={errorStatus}
         reload={() => setRefreshIndex((current) => current + 1)}
         role={role}
         customerId={customerId}

@@ -3,6 +3,9 @@ import { ObjectType, Query, Field } from "@nestjs/graphql";
 @ObjectType()
 export class SeatModel{
     @Field()
+    id!: number;
+
+    @Field()
     status!: string;
 
     @Field()
@@ -13,5 +16,6 @@ export class SeatModel{
 
     @Field()
     updated_at!: Date;
+
 
 }

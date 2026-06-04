@@ -1,4 +1,4 @@
-import { Query, Resolver, Args, Mutation } from "@nestjs/graphql";
+import { Query, Resolver, Args, Mutation, Parent, ResolveField } from "@nestjs/graphql";
 import { SeatService } from "./seat.service";
 import { SeatModel } from "./model/seat.model";
 import { PrismaService } from "../../prisma/prisma.service";
@@ -23,32 +23,15 @@ export class SeatResolver{
     }
 
 
-    @Query(()=> TicketModel)
-    ticket(@Args('id', {type: ()=> Number}) id: number){
-        return this.ticketService.findBySeatId(id);
+
+    @ResolveField(()=> TicketModel)
+    ticket(@Parent() seat: SeatModel){
+        return this.ticketService.findBySeatId(seat.id);
     }
 
+
+ 
     
-    @Mutation(()=> SeatModel)
-    setSeatToAvailable(@Args('id', {type: ()=> Number}) id: number){
-        return this.seatService.updateSeat(id, SeatStatus.Available );
-    }
-    @Mutation(()=> SeatModel)
-    setSeatToBooked(@Args('id', {type: ()=> Number}) id: number){
-        return this.seatService.updateSeat(id, SeatStatus.Booked );
-    }
-    @Mutation(()=> SeatModel)
-    setSeatToUnavailable(@Args('id', {type: ()=> Number}) id: number){
-        return this.seatService.updateSeat(id, SeatStatus.Unavailable ); 
-    }
-
-    @Mutation(()=> SeatModel)
-    create(@Args('data', {type: ()=> CreateSeatInput}) data: CreateSeatInput){
-        return this.seatService.create(data);
-    }
-    @Mutation(()=> SeatModel)
-    delete(@Args('id', {type: ()=> Number}) id: number){
-        return this.seatService.delete(id);
-    }
+    
 
 }

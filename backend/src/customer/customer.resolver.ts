@@ -57,6 +57,8 @@ export class CustomerResolver {
         return this.ticketService.deleteOne(id);
     }
 
+    
+
 
     
 

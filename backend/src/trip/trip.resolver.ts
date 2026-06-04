@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import {PrismaService } from "../../prisma/prisma.service";
-import { Query, Args, Mutation, Resolver, ResolveProperty, ResolveField } from "@nestjs/graphql";
+import { Query, Args, Mutation, Resolver, ResolveProperty, ResolveField, Parent } from "@nestjs/graphql";
 import { TripModel } from "./model/trip.model";
 import { TripService } from "./trip.service";
 import { SeatService } from "../seat/seat.service";
 import { SeatModel } from "../seat/model/seat.model";
 import { CreateTripInput } from "./dto/create.dto";
+import { StatisticModel } from "../seat/model/statistic.model";
 @Resolver(()=> TripModel)
 export class TripResolver{
     constructor(
@@ -17,13 +18,19 @@ export class TripResolver{
     trip(@Args('id', {type: ()=> Number}) id: number){
         return this.tripService.getById(id);
     }
+
     @Query(()=>[TripModel])
     trips(){
         return this.tripService.get();
     }
+    
     @ResolveField(()=> SeatModel)
-    seats(@Args('id', {type: ()=> Number}) id: number){
-        return this.seatService.getAllByTripId(id);
+    seats(@Parent() trip: TripModel){
+        return this.seatService.getAllByTripId(trip.id);
+    }
+    @ResolveField(()=>StatisticModel)
+    seatStatistic(@Parent() trip: TripModel){
+        return this.seatService.statisticsByTripId(trip.id);
     }
 
     @Mutation(()=> TripModel)
