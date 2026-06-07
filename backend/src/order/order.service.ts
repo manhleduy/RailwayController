@@ -106,6 +106,32 @@ export class OrderService {
             }
         })
     }
+    async staffOrderStatisticPerMonth(id: string, year: number){
+        const months = Array.from({ length: 12 }, (_, index) => index + 1);
+
+        return Promise.all(
+            months.map(async (month) => {
+                const aggregate = await this.prisma.order.aggregate({
+                    where: {
+                        staff_id: id,
+                        created_at: {
+                            gte: new Date(year, month - 1, 1),
+                            lt: new Date(year, month, 1)
+                        }
+                    },
+                    _count: {
+                        id: true,
+                    }
+                });
+
+                return {
+                    year,
+                    month,
+                    _count: aggregate._count.id ?? 0
+                };
+            })
+        );
+    }
     
       
 }

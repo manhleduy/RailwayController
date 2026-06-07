@@ -5,14 +5,13 @@ import {
   RefreshCcw,
   Ticket,
   TrainFront,
-  User,
-  WalletCards,
+  Shield,
   ArrowRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ApiErrorView, { ApiErrorViewProps } from '@/components/apiError/Error';
+import ApiErrorView from '@/components/apiError/Error';
 
-import type { DashboardInjectedProps } from './withDashboard';
+import type { StaffDashboardInjectedProps } from './withStaffDashboard';
 
 const currencyFormatter = new Intl.NumberFormat('vi-VN', {
   style: 'currency',
@@ -20,17 +19,8 @@ const currencyFormatter = new Intl.NumberFormat('vi-VN', {
   maximumFractionDigits: 0,
 });
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
-
 function formatCurrency(value: number) {
   return currencyFormatter.format(value);
-}
-
-function formatDate(value: string) {
-  return dateFormatter.format(new Date(value));
 }
 
 function MetricCard({
@@ -50,7 +40,7 @@ function MetricCard({
     <article
       className={`rounded-[1.75rem] border p-5 shadow-[0_24px_80px_-44px_rgba(15,23,42,0.9)] backdrop-blur transition-all duration-200 hover:-translate-y-1 ${
         accent
-          ? 'border-emerald-400/20 bg-emerald-400/12'
+          ? 'border-sky-400/20 bg-sky-400/12'
           : 'border-white/10 bg-white/5 hover:border-white/15 hover:bg-white/8'
       }`}
     >
@@ -64,7 +54,7 @@ function MetricCard({
         </div>
         <div
           className={`flex size-12 items-center justify-center rounded-2xl ${
-            accent ? 'bg-emerald-400 text-slate-950' : 'bg-white/10 text-white'
+            accent ? 'bg-sky-400 text-slate-950' : 'bg-white/10 text-white'
           }`}
         >
           <Icon className="size-5" aria-hidden="true" />
@@ -77,12 +67,10 @@ function MetricCard({
 function MonthBar({
   month,
   count,
-  sum,
   maxValue,
 }: {
   month: number;
   count: number;
-  sum: number;
   maxValue: number;
 }) {
   const monthLabel = new Intl.DateTimeFormat('en', { month: 'short' }).format(
@@ -94,7 +82,7 @@ function MonthBar({
     <div className="flex flex-col items-center gap-2">
       <div className="flex h-36 w-full items-end rounded-2xl border border-white/10 bg-slate-950/50 p-2">
         <div
-          className="w-full rounded-xl bg-gradient-to-t from-emerald-400 via-emerald-300 to-sky-300 transition-all duration-300"
+          className="w-full rounded-xl bg-gradient-to-t from-sky-400 via-sky-300 to-cyan-300 transition-all duration-300"
           style={{ height: `${height}%` }}
           aria-hidden="true"
         />
@@ -102,7 +90,7 @@ function MonthBar({
       <div className="text-center">
         <p className="text-xs font-medium text-slate-300">{monthLabel}</p>
         <p className="text-[0.7rem] text-slate-500">
-          {count} order{count === 1 ? '' : 's'} • {formatCurrency(sum)}
+          {count} ticket{count === 1 ? '' : 's'}
         </p>
       </div>
     </div>
@@ -122,39 +110,21 @@ function DashboardSkeleton() {
   );
 }
 
-export function DashboardView({
+export function StaffDashboardView({
   dashboard,
   loading,
   error,
   errorStatus,
   reload,
   role,
-  customerId,
+  staffId,
   year,
-}: DashboardInjectedProps) {
+}: StaffDashboardInjectedProps) {
   if (loading) {
     return <DashboardSkeleton />;
   }
 
-  if (role === 'STAFF') {
-    return (
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
-            Access info
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            Staff dashboard is loading...
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            Please wait while we load the staff dashboard for you.
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  if (role && role !== 'CUSTOMER') {
+  if (role && role !== 'STAFF') {
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
@@ -162,10 +132,10 @@ export function DashboardView({
             Access denied
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            Unknown role: {role}
+            Staff dashboard access restricted
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            Your role is not recognized by the dashboard system.
+            You are signed in as a {role}. Only staff members can access this dashboard.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -181,13 +151,10 @@ export function DashboardView({
   }
 
   if (error) {
-    // Use centralized API error view for clearer handling of HTTP statuses
-    // Lazy import to keep bundle small when not used
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return <ApiErrorView status={errorStatus} message={error} reload={reload} context="dashboard" />;
   }
 
-  if (!dashboard || !dashboard.customer) {
+  if (!dashboard || !dashboard.statistics) {
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
@@ -195,19 +162,20 @@ export function DashboardView({
             Dashboard snapshot
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            No customer dashboard data yet
+            No staff dashboard data yet
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            Signed-in customer information is available at {customerId ?? 'your account'}.
-            Once the backend returns a matching customer record, the dashboard will render
-            orders and monthly statistics here.
+            Signed-in staff information is available at {staffId ?? 'your account'}.
+            Once the backend returns accepted orders, the dashboard will render
+            statistics here.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              to="/order"
-              className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-300"
+              to="/staff/orders"
+              className="inline-flex items-center gap-2 rounded-full bg-sky-400 px-5 py-3 text-sm font-semibold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-sky-300"
             >
-              Open order builder
+              View orders
+              <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
             <button
               type="button"
@@ -223,20 +191,17 @@ export function DashboardView({
     );
   }
 
-  const orders = dashboard.orders ?? [];
-  const statistics = dashboard.statistic ?? [];
-  const totalSpent = statistics.reduce((sum, item) => sum + (item._sum ?? 0), 0);
-  const totalOrders = orders.length || statistics.reduce((sum, item) => sum + item._count, 0);
-  const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0;
+  const statistics = dashboard.statistics ?? [];
+  const totalAccepted = statistics.reduce((sum, item) => sum + item._count, 0);
   const maxMonthlyCount = Math.max(...statistics.map((item) => item._count), 1);
-  const recentOrders = [...orders].sort(
-    (left, right) =>
-      new Date(right.created_at).getTime() - new Date(left.created_at).getTime()
+  const currentMonthStat = statistics.find(
+    (item) => item.month === new Date().getMonth() + 1 && item.year === year
   );
+  const currentMonthTickets = currentMonthStat?._count ?? 0;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.2),_transparent_26%),radial-gradient(circle_at_80%_0%,_rgba(59,130,246,0.18),_transparent_24%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#020617_100%)]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.2),_transparent_26%),radial-gradient(circle_at_80%_0%,_rgba(0,184,245,0.18),_transparent_24%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#020617_100%)]" />
 
       <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div className="flex flex-col gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-6 lg:flex-row lg:items-end lg:justify-between">
@@ -245,22 +210,21 @@ export function DashboardView({
               to="/"
               className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
             >
-              <TrainFront className="size-4 text-emerald-300" aria-hidden="true" />
+              <TrainFront className="size-4 text-sky-300" aria-hidden="true" />
               Back to Home
             </Link>
 
             <div className="max-w-3xl space-y-3">
-              <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-200">
+              <p className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-sky-200">
                 <BadgeCheck className="size-3.5" aria-hidden="true" />
-                Customer dashboard
+                Staff dashboard
               </p>
               <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Welcome back, {dashboard.customer.full_name}
+                Welcome, Staff Member
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                Orders, monthly spending, and recent booking activity are synced from the
-                backend for {year}. This shell is ready to become customer- and staff-specific
-                later without changing the fetch layer.
+                Track your accepted orders and monthly statistics for {year}. Manage orders
+                and seat availability from this centralized dashboard.
               </p>
             </div>
           </div>
@@ -268,20 +232,20 @@ export function DashboardView({
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
               <p className="text-[0.65rem] uppercase tracking-[0.28em] text-slate-400">Role</p>
-              <p className="mt-2 text-lg font-semibold text-white">{role ?? 'CUSTOMER'}</p>
+              <p className="mt-2 text-lg font-semibold text-white">{role ?? 'STAFF'}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
               <p className="text-[0.65rem] uppercase tracking-[0.28em] text-slate-400">
-                Customer ID
+                Staff ID
               </p>
-              <p className="mt-2 text-lg font-semibold text-white">{dashboard.customer.id}</p>
+              <p className="mt-2 text-lg font-semibold text-white">{staffId}</p>
             </div>
-            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
-              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-emerald-100/80">
-                Loyalty rank
+            <div className="rounded-2xl border border-sky-400/20 bg-sky-400/10 p-4">
+              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-sky-100/80">
+                This month
               </p>
-              <p className="mt-2 text-lg font-semibold text-emerald-200">
-                Rank {dashboard.customer.rank}
+              <p className="mt-2 text-lg font-semibold text-sky-200">
+                {currentMonthTickets} ticket{currentMonthTickets === 1 ? '' : 's'}
               </p>
             </div>
           </div>
@@ -289,29 +253,29 @@ export function DashboardView({
 
         <div className="mt-8 grid gap-4 lg:grid-cols-4">
           <MetricCard
-            title="Orders"
-            value={String(totalOrders)}
-            description="Completed bookings captured from the backend."
+            title="Total accepted"
+            value={String(totalAccepted)}
+            description="Tickets accepted and confirmed this year."
             icon={Ticket}
           />
           <MetricCard
-            title="Total spent"
-            value={formatCurrency(totalSpent)}
-            description="Monthly aggregate total across the loaded year."
-            icon={CircleDollarSign}
+            title="Current month"
+            value={String(currentMonthTickets)}
+            description={`Confirmed tickets in ${new Intl.DateTimeFormat('en', { month: 'long' }).format(new Date())}.`}
+            icon={Clock3}
             accent
           />
           <MetricCard
-            title="Average order"
-            value={formatCurrency(averageOrderValue)}
-            description="Average value per order from the order history."
-            icon={WalletCards}
+            title="Monthly average"
+            value={String(Math.round(totalAccepted / 12))}
+            description="Average tickets per month based on yearly data."
+            icon={Shield}
           />
           <MetricCard
-            title="Last sync"
-                    value={orders[0] ? 'Live' : 'Idle'}
-            description="The dashboard is hydrated from the GraphQL backend."
-            icon={Clock3}
+            title="Quick actions"
+            value="2"
+            description="View orders and manage seats from the sidebar."
+            icon={ArrowRight}
           />
         </div>
 
@@ -320,14 +284,14 @@ export function DashboardView({
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
-                  Monthly statistics
+                  Accepted tickets
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-                  Order volume and spend by month
+                  Monthly breakdown
                 </h2>
               </div>
               <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
-                Backend: `statistic(data)`
+                Year {year}
               </div>
             </div>
 
@@ -337,7 +301,6 @@ export function DashboardView({
                   key={`${item.year}-${item.month}`}
                   month={item.month}
                   count={item._count}
-                  sum={item._sum}
                   maxValue={maxMonthlyCount}
                 />
               ))}
@@ -348,39 +311,38 @@ export function DashboardView({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
-                  Customer profile
+                  Staff portal
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-                  {dashboard.customer.full_name}
+                  Management tools
                 </h2>
               </div>
-              <div className="flex size-11 items-center justify-center rounded-2xl bg-emerald-400 text-slate-950">
-                <User className="size-5" aria-hidden="true" />
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-sky-400 text-slate-950">
+                <Shield className="size-5" aria-hidden="true" />
               </div>
             </div>
 
-            <div className="mt-6 space-y-4 text-sm text-slate-300">
-              <p className="flex items-center gap-3">
-                <BadgeCheck className="size-4 text-emerald-300" aria-hidden="true" />
-                {dashboard.customer.email}
-              </p>
-              <p className="flex items-center gap-3">
-                <Ticket className="size-4 text-sky-300" aria-hidden="true" />
-                {dashboard.customer.phone}
-              </p>
-              <p className="flex items-center gap-3">
-                <Clock3 className="size-4 text-amber-300" aria-hidden="true" />
-                Last updated {formatDate(dashboard.customer.updated_at)}
-              </p>
-            </div>
-
-            <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Quick action</p>
+            <div className="mt-6 space-y-3">
               <Link
-                to="/order"
-                className="mt-3 inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-300"
+                to="/staff/orders"
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-sky-400/40 hover:bg-sky-400/10 hover:text-sky-200"
               >
-                Start a new order
+                <Ticket className="size-4 text-sky-300" aria-hidden="true" />
+                <div className="flex-1">
+                  <div className="font-semibold">View Orders</div>
+                  <div className="text-xs text-slate-400">Accept or reject orders</div>
+                </div>
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+              <Link
+                to="/staff/trips"
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-sky-400/40 hover:bg-sky-400/10 hover:text-sky-200"
+              >
+                <TrainFront className="size-4 text-sky-300" aria-hidden="true" />
+                <div className="flex-1">
+                  <div className="font-semibold">Manage Trips</div>
+                  <div className="text-xs text-slate-400">Change seat availability</div>
+                </div>
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
@@ -388,55 +350,33 @@ export function DashboardView({
         </div>
 
         <section className="mt-8 rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_28px_90px_-45px_rgba(15,23,42,0.95)] backdrop-blur-xl sm:p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
-                Recent orders
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
-                Latest booking history
-              </h2>
-            </div>
-            <Link
-              to="/order"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:border-white/20 hover:bg-white/10"
-            >
-              Open order builder
-            </Link>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+              Quick summary
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
+              Dashboard overview
+            </h2>
           </div>
 
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full text-left">
-              <thead className="text-xs uppercase tracking-[0.22em] text-slate-400">
-                <tr>
-                  <th className="py-3 pr-4 font-medium">Order</th>
-                  <th className="py-3 pr-4 font-medium">Payment</th>
-                  <th className="py-3 pr-4 font-medium">Status</th>
-                  <th className="py-3 pr-4 font-medium">Total</th>
-                  <th className="py-3 pr-4 font-medium">Created</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="transition-colors hover:bg-white/[0.03]">
-                    <td className="py-4 pr-4">
-                      <div className="font-semibold text-white">#{order.id}</div>
-                      <div className="text-sm text-slate-400">{order.customer_id}</div>
-                    </td>
-                    <td className="py-4 pr-4 text-slate-300">{order.payment_method}</td>
-                    <td className="py-4 pr-4">
-                      <span className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-4 pr-4 font-semibold text-white">
-                      {formatCurrency(order.total_price)}
-                    </td>
-                    <td className="py-4 pr-4 text-slate-300">{formatDate(order.created_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Total year</p>
+              <p className="mt-3 text-3xl font-semibold text-white">{totalAccepted}</p>
+              <p className="mt-2 text-sm text-slate-400">Confirmed tickets in {year}</p>
+            </div>
+            {statistics.slice(0, 3).map((stat) => {
+              const monthName = new Intl.DateTimeFormat('en', { month: 'short' }).format(
+                new Date(2026, stat.month - 1, 1)
+              );
+              return (
+                <div key={`${stat.year}-${stat.month}`} className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{monthName}</p>
+                  <p className="mt-3 text-3xl font-semibold text-white">{stat._count}</p>
+                  <p className="mt-2 text-sm text-slate-400">Tickets accepted</p>
+                </div>
+              );
+            })}
           </div>
         </section>
       </section>

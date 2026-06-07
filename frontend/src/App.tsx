@@ -12,6 +12,9 @@ import RecentActivityPage from './pages/RecentActivityPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import TripsPage from './pages/TripsPage';
+import { StaffDashboardPage } from './pages/StaffDashboardPage';
+import { StaffOrdersPage } from './pages/StaffOrdersPage';
+import { StaffTripsPage } from './pages/StaffTripsPage';
 
 function AppRoutes() {
   return (
@@ -25,6 +28,10 @@ function AppRoutes() {
       <Route path="/activity" element={<RecentActivityPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      {/* Staff Routes */}
+      <Route path="/staff/dashboard" element={<StaffDashboardPage />} />
+      <Route path="/staff/orders" element={<StaffOrdersPage />} />
+      <Route path="/staff/trips" element={<StaffTripsPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

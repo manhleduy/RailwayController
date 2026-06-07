@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
   ArrowRight,
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import { requestGraphQL } from '@/lib/api/graphql';
+import { useAppSelector } from '@/lib/store/reduxHooks';
 import { TripCard } from '@/components/trips/TripCard';
 import { Input } from '@/components/ui/input';
 
@@ -53,6 +54,13 @@ const GET_TRIPS_QUERY = `
 `;
 
 export default function TripsPage() {
+  const { user } = useAppSelector((state) => state.auth);
+
+  // Staff members should use /staff/trips instead
+  if (user?.role === 'STAFF') {
+    return <Navigate to="/staff/trips" replace />;
+  }
+
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

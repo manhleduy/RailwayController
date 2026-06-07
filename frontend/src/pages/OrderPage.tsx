@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
   Banknote,
@@ -418,6 +418,12 @@ function TicketCard({
 
 export default function OrderPage() {
   const { user } = useAppSelector((state) => state.auth);
+
+  // Staff members should use /staff/orders instead
+  if (user?.role === 'STAFF') {
+    return <Navigate to="/staff/orders" replace />;
+  }
+
   const [order, setOrder] = useState<OrderRecord>(() => ({
     ...initialOrder,
     customer_id: user?.id ?? initialOrder.customer_id,
