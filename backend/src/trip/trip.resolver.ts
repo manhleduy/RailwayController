@@ -6,7 +6,7 @@ import { TripService } from "./trip.service";
 import { SeatService } from "../seat/seat.service";
 import { SeatModel } from "../seat/model/seat.model";
 import { CreateTripInput } from "./dto/create.dto";
-import { StatisticModel } from "../seat/model/statistic.model";
+import { SeatStatisticModel } from "../seat/model/statistic.model";
 @Resolver(()=> TripModel)
 export class TripResolver{
     constructor(
@@ -28,7 +28,7 @@ export class TripResolver{
     seats(@Parent() trip: TripModel){
         return this.seatService.getAllByTripId(trip.id);
     }
-    @ResolveField(()=>StatisticModel)
+    @ResolveField(()=>SeatStatisticModel)
     seatStatistic(@Parent() trip: TripModel){
         return this.seatService.statisticsByTripId(trip.id);
     }

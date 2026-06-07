@@ -1,7 +1,7 @@
 import { ObjectType } from "@nestjs/graphql";
 import { Field } from "@nestjs/graphql";
 @ObjectType()
-export class StatisticModel{
+export class OrderStatisticModel{
     @Field()
     year!: number;
 

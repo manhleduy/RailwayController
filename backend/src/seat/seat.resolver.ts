@@ -6,7 +6,7 @@ import { TicketService } from "../ticket/ticket.service";
 import { TicketModel } from "../ticket/model/ticket.model";
 import { SeatStatus } from "@prisma/client";
 import { CreateSeatInput } from "./dto/create.dto";
-@Resolver()
+@Resolver(()=> SeatModel)
 export class SeatResolver{
     constructor(
         private readonly seatService: SeatService,

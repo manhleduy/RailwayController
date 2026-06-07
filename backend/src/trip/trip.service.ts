@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import {PrismaService } from "../../prisma/prisma.service";
-import { TripModel } from "../../generated/prisma/models";
 import { CreateTripInput } from "./dto/create.dto";
 @Injectable()
 export class TripService{

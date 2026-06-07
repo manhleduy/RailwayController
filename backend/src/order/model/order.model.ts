@@ -1,8 +1,7 @@
 import { ObjectType, Field } from "@nestjs/graphql";
-import { OrderModel as MainModel } from "../../../generated/prisma/models";
 
 @ObjectType()
-export  class OrderModel implements MainModel{
+export  class OrderModel{
     @Field()
     id!: number;
 

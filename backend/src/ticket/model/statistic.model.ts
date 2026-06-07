@@ -1,8 +1,8 @@
 import { ObjectType } from "@nestjs/graphql";
 import { Field } from "@nestjs/graphql";
-import { SeatStatus } from "../../../generated/prisma/client";
+import { SeatStatus } from "@prisma/client";
 @ObjectType()
-export class StatisticModel{
+export class TicketStatisticModel{
     @Field()
     status!: SeatStatus;
 
