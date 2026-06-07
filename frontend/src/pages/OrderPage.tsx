@@ -19,10 +19,12 @@ import {
   WalletCards,
   ChevronRight,
   Minus,
+  Edit,
 } from 'lucide-react';
 
 import { createOrder } from '@/lib/api/orders';
 import { useAppSelector } from '@/lib/store/reduxHooks';
+import { SeatSelectionModal } from '@/components/order';
 
 type DateTimeString = string;
 
@@ -265,20 +267,20 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
 
 function TicketCard({
   ticket,
-  seatOptions,
-  isSeatTaken,
   onChangeField,
   onDelete,
+  onEditSeat,
 }: {
   ticket: TicketRecord;
-  seatOptions: number[];
-  isSeatTaken: (seatId: number, ticketId: number) => boolean;
+  seatOptions?: number[];
+  isSeatTaken?: (seatId: number, ticketId: number) => boolean;
   onChangeField: (
     ticketId: number,
     field: 'pass_name' | 'pass_cccd' | 'seat_id',
     value: string | number
   ) => void;
   onDelete: (ticketId: number) => void;
+  onEditSeat: (ticketId: number) => void;
 }) {
   return (
     <article
@@ -371,31 +373,23 @@ function TicketCard({
           </div>
 
           <div className="mt-5 space-y-3">
-            <label className="space-y-2">
+            <div className="space-y-2">
               <span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
                 Seat ID
               </span>
-              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-200 focus-within:border-emerald-400/60 focus-within:bg-white/8 focus-within:ring-2 focus-within:ring-emerald-400/20">
+              <button
+                type="button"
+                onClick={() => onEditSeat(ticket.id)}
+                className="flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-200 hover:border-emerald-400/40 hover:bg-white/8 focus-visible:border-emerald-400/60 focus-visible:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/20"
+              >
                 <Ticket className="size-4 shrink-0 text-slate-400" aria-hidden="true" />
-                <select
-                  value={ticket.seat_id}
-                  onChange={(event) =>
-                    onChangeField(ticket.id, 'seat_id', Number(event.target.value))
-                  }
-                  className="w-full bg-transparent text-sm text-white focus:outline-none"
-                >
-                  {seatOptions.map((seat) => {
-                    const occupied = isSeatTaken(seat, ticket.id);
-
-                    return (
-                      <option key={seat} value={seat} disabled={occupied}>
-                        Seat {seat}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            </label>
+                <span className="flex-1 text-left">
+                  <span className="text-sm font-semibold text-white">Seat {ticket.seat_id}</span>
+                  <span className="block text-xs text-slate-400">Click to change seat</span>
+                </span>
+                <Edit className="size-4 shrink-0 text-emerald-300" aria-hidden="true" />
+              </button>
+            </div>
 
             <div className="rounded-3xl border border-white/10 bg-slate-950/60 p-4">
               <div className="flex items-center justify-between gap-3">
@@ -432,6 +426,8 @@ export default function OrderPage() {
   const [nextTicketId, setNextTicketId] = useState(4);
   const [isSaving, setIsSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isEditingSeat, setIsEditingSeat] = useState(false);
+  const [editingTicketId, setEditingTicketId] = useState<number | null>(null);
 
   useEffect(() => {
     if (user?.id) {
@@ -563,6 +559,38 @@ export default function OrderPage() {
       payment_method: value,
       updated_at: timestamp,
     }));
+  };
+
+  const handleEditSeat = (ticketId: number) => {
+    setEditingTicketId(ticketId);
+    setIsEditingSeat(true);
+  };
+
+  const handleSelectSeat = (seatId: number) => {
+    if (editingTicketId === null) return;
+
+    const timestamp = nowIso();
+
+    setTickets((current) =>
+      current.map((ticket) =>
+        ticket.id === editingTicketId
+          ? {
+              ...ticket,
+              seat_id: seatId,
+              updated_at: timestamp,
+            }
+          : ticket
+      )
+    );
+
+    setOrder((current) => ({
+      ...current,
+      updated_at: timestamp,
+    }));
+
+    setIsEditingSeat(false);
+    setEditingTicketId(null);
+    toast.success(`Seat ${seatId} selected successfully`);
   };
 
   const handleSubmitOrder = async () => {
@@ -700,12 +728,9 @@ export default function OrderPage() {
                   <TicketCard
                     key={ticket.id}
                     ticket={ticket}
-                    seatOptions={seatOptions}
-                    isSeatTaken={(seatId, ticketId) =>
-                      seatOccupancy.has(seatId) && seatOccupancy.get(seatId) !== ticketId
-                    }
                     onChangeField={handleTicketChange}
                     onDelete={handleDeleteTicket}
+                    onEditSeat={handleEditSeat}
                   />
                 ))
               ) : (
@@ -845,6 +870,17 @@ export default function OrderPage() {
             </div>
           </aside>
         </main>
+
+        {/* Seat Selection Modal */}
+        <SeatSelectionModal
+          isOpen={isEditingSeat}
+          onClose={() => {
+            setIsEditingSeat(false);
+            setEditingTicketId(null);
+          }}
+          onSelectSeat={handleSelectSeat}
+          occupiedSeats={Array.from(seatOccupancy.keys())}
+        />
       </div>
     </div>
   );

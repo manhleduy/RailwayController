@@ -1,0 +1,1 @@
+export { SeatSelectionModal } from './SeatSelectionModal';
