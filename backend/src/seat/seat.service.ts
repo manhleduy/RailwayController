@@ -5,23 +5,23 @@ import { CreateSeatInput } from "./dto/create.dto";
 export class SeatService{
     constructor(private readonly prisma: PrismaService){}
 
-    async get(id: number){
-        return await this.prisma.seat.findFirst({
+    get(id: number){
+        return this.prisma.seat.findFirst({
             where: {
                 id: id
             }
         });
 
     }
-    async getAllByTripId(trip_id: number){
-        return await this.prisma.seat.findMany({
+    getAllByTripId(trip_id: number){
+        return this.prisma.seat.findMany({
             where:{
                 trip_id: trip_id
             }
         })
     }
-    async create(data: CreateSeatInput) {
-        return await this.prisma.seat.create({
+    create(data: CreateSeatInput) {
+        this.prisma.seat.create({
             data: {
                 ...data,
                 status: "Available",
@@ -32,12 +32,13 @@ export class SeatService{
 
     
     }
-    async statisticsByTripId(trip_id: number){
-        return await this.prisma.seat.groupBy({
+    statisticsByTripId(trip_id: number){
+        return this.prisma.seat.groupBy({
             by: ['status'],
             where: {
                 trip_id: trip_id
             },
+             
             _count:{
                 id: true
             },
@@ -46,8 +47,8 @@ export class SeatService{
             }
         })
     }
-    async statistic(){
-        return await this.prisma.seat.groupBy({
+    statistic(){
+        return this.prisma.seat.groupBy({
             by: ['status'],
             _count:{
                 id: true
@@ -57,8 +58,8 @@ export class SeatService{
             }
         })
     }
-    async updateSeat(id: number, status: string){
-        return await this.prisma.seat.update({
+    updateSeat(id: number, status: string){
+        return this.prisma.seat.update({
             where: {
                 id: id
             },
@@ -69,8 +70,8 @@ export class SeatService{
         });
     }
 
-    async delete(id: number){
-        return await this.prisma.seat.delete({
+    delete(id: number){
+        return this.prisma.seat.delete({
             where:{
                 id: id
             }

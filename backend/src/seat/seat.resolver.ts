@@ -28,10 +28,6 @@ export class SeatResolver{
     ticket(@Parent() seat: SeatModel){
         return this.ticketService.findBySeatId(seat.id);
     }
-
-
- 
-    
     
 
 }

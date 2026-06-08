@@ -29,11 +29,13 @@ export type AggregateSeat = {
 export type SeatAvgAggregateOutputType = {
   id: number | null
   trip_id: number | null
+  seat_class_id: number | null
 }
 
 export type SeatSumAggregateOutputType = {
   id: number | null
   trip_id: number | null
+  seat_class_id: number | null
 }
 
 export type SeatMinAggregateOutputType = {
@@ -42,6 +44,7 @@ export type SeatMinAggregateOutputType = {
   trip_id: number | null
   created_at: Date | null
   updated_at: Date | null
+  seat_class_id: number | null
 }
 
 export type SeatMaxAggregateOutputType = {
@@ -50,6 +53,7 @@ export type SeatMaxAggregateOutputType = {
   trip_id: number | null
   created_at: Date | null
   updated_at: Date | null
+  seat_class_id: number | null
 }
 
 export type SeatCountAggregateOutputType = {
@@ -58,6 +62,7 @@ export type SeatCountAggregateOutputType = {
   trip_id: number
   created_at: number
   updated_at: number
+  seat_class_id: number
   _all: number
 }
 
@@ -65,11 +70,13 @@ export type SeatCountAggregateOutputType = {
 export type SeatAvgAggregateInputType = {
   id?: true
   trip_id?: true
+  seat_class_id?: true
 }
 
 export type SeatSumAggregateInputType = {
   id?: true
   trip_id?: true
+  seat_class_id?: true
 }
 
 export type SeatMinAggregateInputType = {
@@ -78,6 +85,7 @@ export type SeatMinAggregateInputType = {
   trip_id?: true
   created_at?: true
   updated_at?: true
+  seat_class_id?: true
 }
 
 export type SeatMaxAggregateInputType = {
@@ -86,6 +94,7 @@ export type SeatMaxAggregateInputType = {
   trip_id?: true
   created_at?: true
   updated_at?: true
+  seat_class_id?: true
 }
 
 export type SeatCountAggregateInputType = {
@@ -94,6 +103,7 @@ export type SeatCountAggregateInputType = {
   trip_id?: true
   created_at?: true
   updated_at?: true
+  seat_class_id?: true
   _all?: true
 }
 
@@ -189,6 +199,7 @@ export type SeatGroupByOutputType = {
   trip_id: number
   created_at: Date
   updated_at: Date
+  seat_class_id: number
   _count: SeatCountAggregateOutputType | null
   _avg: SeatAvgAggregateOutputType | null
   _sum: SeatSumAggregateOutputType | null
@@ -220,6 +231,8 @@ export type SeatWhereInput = {
   trip_id?: Prisma.IntFilter<"Seat"> | number
   created_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
+  seat_class_id?: Prisma.IntFilter<"Seat"> | number
+  seat_class?: Prisma.XOR<Prisma.SeatClassScalarRelationFilter, Prisma.SeatClassWhereInput>
   ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
   trip?: Prisma.XOR<Prisma.TripScalarRelationFilter, Prisma.TripWhereInput>
 }
@@ -230,6 +243,8 @@ export type SeatOrderByWithRelationInput = {
   trip_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
+  seat_class?: Prisma.SeatClassOrderByWithRelationInput
   ticket?: Prisma.TicketOrderByWithRelationInput
   trip?: Prisma.TripOrderByWithRelationInput
 }
@@ -243,6 +258,8 @@ export type SeatWhereUniqueInput = Prisma.AtLeast<{
   trip_id?: Prisma.IntFilter<"Seat"> | number
   created_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
+  seat_class_id?: Prisma.IntFilter<"Seat"> | number
+  seat_class?: Prisma.XOR<Prisma.SeatClassScalarRelationFilter, Prisma.SeatClassWhereInput>
   ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
   trip?: Prisma.XOR<Prisma.TripScalarRelationFilter, Prisma.TripWhereInput>
 }, "id">
@@ -253,6 +270,7 @@ export type SeatOrderByWithAggregationInput = {
   trip_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
   _count?: Prisma.SeatCountOrderByAggregateInput
   _avg?: Prisma.SeatAvgOrderByAggregateInput
   _max?: Prisma.SeatMaxOrderByAggregateInput
@@ -269,12 +287,14 @@ export type SeatScalarWhereWithAggregatesInput = {
   trip_id?: Prisma.IntWithAggregatesFilter<"Seat"> | number
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Seat"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"Seat"> | Date | string
+  seat_class_id?: Prisma.IntWithAggregatesFilter<"Seat"> | number
 }
 
 export type SeatCreateInput = {
   status: $Enums.SeatStatus
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class: Prisma.SeatClassCreateNestedOneWithoutSeatsInput
   ticket?: Prisma.TicketCreateNestedOneWithoutSeatInput
   trip: Prisma.TripCreateNestedOneWithoutSeatsInput
 }
@@ -285,6 +305,7 @@ export type SeatUncheckedCreateInput = {
   trip_id: number
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class_id: number
   ticket?: Prisma.TicketUncheckedCreateNestedOneWithoutSeatInput
 }
 
@@ -292,6 +313,7 @@ export type SeatUpdateInput = {
   status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class?: Prisma.SeatClassUpdateOneRequiredWithoutSeatsNestedInput
   ticket?: Prisma.TicketUpdateOneWithoutSeatNestedInput
   trip?: Prisma.TripUpdateOneRequiredWithoutSeatsNestedInput
 }
@@ -302,6 +324,7 @@ export type SeatUncheckedUpdateInput = {
   trip_id?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class_id?: Prisma.IntFieldUpdateOperationsInput | number
   ticket?: Prisma.TicketUncheckedUpdateOneWithoutSeatNestedInput
 }
 
@@ -311,6 +334,7 @@ export type SeatCreateManyInput = {
   trip_id: number
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class_id: number
 }
 
 export type SeatUpdateManyMutationInput = {
@@ -325,6 +349,7 @@ export type SeatUncheckedUpdateManyInput = {
   trip_id?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SeatScalarRelationFilter = {
@@ -338,11 +363,13 @@ export type SeatCountOrderByAggregateInput = {
   trip_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
 }
 
 export type SeatAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   trip_id?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
 }
 
 export type SeatMaxOrderByAggregateInput = {
@@ -351,6 +378,7 @@ export type SeatMaxOrderByAggregateInput = {
   trip_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
 }
 
 export type SeatMinOrderByAggregateInput = {
@@ -359,11 +387,13 @@ export type SeatMinOrderByAggregateInput = {
   trip_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
 }
 
 export type SeatSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   trip_id?: Prisma.SortOrder
+  seat_class_id?: Prisma.SortOrder
 }
 
 export type SeatListRelationFilter = {
@@ -392,6 +422,48 @@ export type SeatUpdateOneRequiredWithoutTicketNestedInput = {
 
 export type EnumSeatStatusFieldUpdateOperationsInput = {
   set?: $Enums.SeatStatus
+}
+
+export type SeatCreateNestedManyWithoutSeat_classInput = {
+  create?: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput> | Prisma.SeatCreateWithoutSeat_classInput[] | Prisma.SeatUncheckedCreateWithoutSeat_classInput[]
+  connectOrCreate?: Prisma.SeatCreateOrConnectWithoutSeat_classInput | Prisma.SeatCreateOrConnectWithoutSeat_classInput[]
+  createMany?: Prisma.SeatCreateManySeat_classInputEnvelope
+  connect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+}
+
+export type SeatUncheckedCreateNestedManyWithoutSeat_classInput = {
+  create?: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput> | Prisma.SeatCreateWithoutSeat_classInput[] | Prisma.SeatUncheckedCreateWithoutSeat_classInput[]
+  connectOrCreate?: Prisma.SeatCreateOrConnectWithoutSeat_classInput | Prisma.SeatCreateOrConnectWithoutSeat_classInput[]
+  createMany?: Prisma.SeatCreateManySeat_classInputEnvelope
+  connect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+}
+
+export type SeatUpdateManyWithoutSeat_classNestedInput = {
+  create?: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput> | Prisma.SeatCreateWithoutSeat_classInput[] | Prisma.SeatUncheckedCreateWithoutSeat_classInput[]
+  connectOrCreate?: Prisma.SeatCreateOrConnectWithoutSeat_classInput | Prisma.SeatCreateOrConnectWithoutSeat_classInput[]
+  upsert?: Prisma.SeatUpsertWithWhereUniqueWithoutSeat_classInput | Prisma.SeatUpsertWithWhereUniqueWithoutSeat_classInput[]
+  createMany?: Prisma.SeatCreateManySeat_classInputEnvelope
+  set?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  disconnect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  delete?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  connect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  update?: Prisma.SeatUpdateWithWhereUniqueWithoutSeat_classInput | Prisma.SeatUpdateWithWhereUniqueWithoutSeat_classInput[]
+  updateMany?: Prisma.SeatUpdateManyWithWhereWithoutSeat_classInput | Prisma.SeatUpdateManyWithWhereWithoutSeat_classInput[]
+  deleteMany?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
+}
+
+export type SeatUncheckedUpdateManyWithoutSeat_classNestedInput = {
+  create?: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput> | Prisma.SeatCreateWithoutSeat_classInput[] | Prisma.SeatUncheckedCreateWithoutSeat_classInput[]
+  connectOrCreate?: Prisma.SeatCreateOrConnectWithoutSeat_classInput | Prisma.SeatCreateOrConnectWithoutSeat_classInput[]
+  upsert?: Prisma.SeatUpsertWithWhereUniqueWithoutSeat_classInput | Prisma.SeatUpsertWithWhereUniqueWithoutSeat_classInput[]
+  createMany?: Prisma.SeatCreateManySeat_classInputEnvelope
+  set?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  disconnect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  delete?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  connect?: Prisma.SeatWhereUniqueInput | Prisma.SeatWhereUniqueInput[]
+  update?: Prisma.SeatUpdateWithWhereUniqueWithoutSeat_classInput | Prisma.SeatUpdateWithWhereUniqueWithoutSeat_classInput[]
+  updateMany?: Prisma.SeatUpdateManyWithWhereWithoutSeat_classInput | Prisma.SeatUpdateManyWithWhereWithoutSeat_classInput[]
+  deleteMany?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
 }
 
 export type SeatCreateNestedManyWithoutTripInput = {
@@ -440,6 +512,7 @@ export type SeatCreateWithoutTicketInput = {
   status: $Enums.SeatStatus
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class: Prisma.SeatClassCreateNestedOneWithoutSeatsInput
   trip: Prisma.TripCreateNestedOneWithoutSeatsInput
 }
 
@@ -449,6 +522,7 @@ export type SeatUncheckedCreateWithoutTicketInput = {
   trip_id: number
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class_id: number
 }
 
 export type SeatCreateOrConnectWithoutTicketInput = {
@@ -471,6 +545,7 @@ export type SeatUpdateWithoutTicketInput = {
   status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class?: Prisma.SeatClassUpdateOneRequiredWithoutSeatsNestedInput
   trip?: Prisma.TripUpdateOneRequiredWithoutSeatsNestedInput
 }
 
@@ -480,12 +555,69 @@ export type SeatUncheckedUpdateWithoutTicketInput = {
   trip_id?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class_id?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type SeatCreateWithoutSeat_classInput = {
+  status: $Enums.SeatStatus
+  created_at?: Date | string
+  updated_at?: Date | string
+  ticket?: Prisma.TicketCreateNestedOneWithoutSeatInput
+  trip: Prisma.TripCreateNestedOneWithoutSeatsInput
+}
+
+export type SeatUncheckedCreateWithoutSeat_classInput = {
+  id?: number
+  status: $Enums.SeatStatus
+  trip_id: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  ticket?: Prisma.TicketUncheckedCreateNestedOneWithoutSeatInput
+}
+
+export type SeatCreateOrConnectWithoutSeat_classInput = {
+  where: Prisma.SeatWhereUniqueInput
+  create: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput>
+}
+
+export type SeatCreateManySeat_classInputEnvelope = {
+  data: Prisma.SeatCreateManySeat_classInput | Prisma.SeatCreateManySeat_classInput[]
+  skipDuplicates?: boolean
+}
+
+export type SeatUpsertWithWhereUniqueWithoutSeat_classInput = {
+  where: Prisma.SeatWhereUniqueInput
+  update: Prisma.XOR<Prisma.SeatUpdateWithoutSeat_classInput, Prisma.SeatUncheckedUpdateWithoutSeat_classInput>
+  create: Prisma.XOR<Prisma.SeatCreateWithoutSeat_classInput, Prisma.SeatUncheckedCreateWithoutSeat_classInput>
+}
+
+export type SeatUpdateWithWhereUniqueWithoutSeat_classInput = {
+  where: Prisma.SeatWhereUniqueInput
+  data: Prisma.XOR<Prisma.SeatUpdateWithoutSeat_classInput, Prisma.SeatUncheckedUpdateWithoutSeat_classInput>
+}
+
+export type SeatUpdateManyWithWhereWithoutSeat_classInput = {
+  where: Prisma.SeatScalarWhereInput
+  data: Prisma.XOR<Prisma.SeatUpdateManyMutationInput, Prisma.SeatUncheckedUpdateManyWithoutSeat_classInput>
+}
+
+export type SeatScalarWhereInput = {
+  AND?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
+  OR?: Prisma.SeatScalarWhereInput[]
+  NOT?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
+  id?: Prisma.IntFilter<"Seat"> | number
+  status?: Prisma.EnumSeatStatusFilter<"Seat"> | $Enums.SeatStatus
+  trip_id?: Prisma.IntFilter<"Seat"> | number
+  created_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
+  seat_class_id?: Prisma.IntFilter<"Seat"> | number
 }
 
 export type SeatCreateWithoutTripInput = {
   status: $Enums.SeatStatus
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class: Prisma.SeatClassCreateNestedOneWithoutSeatsInput
   ticket?: Prisma.TicketCreateNestedOneWithoutSeatInput
 }
 
@@ -494,6 +626,7 @@ export type SeatUncheckedCreateWithoutTripInput = {
   status: $Enums.SeatStatus
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class_id: number
   ticket?: Prisma.TicketUncheckedCreateNestedOneWithoutSeatInput
 }
 
@@ -523,15 +656,37 @@ export type SeatUpdateManyWithWhereWithoutTripInput = {
   data: Prisma.XOR<Prisma.SeatUpdateManyMutationInput, Prisma.SeatUncheckedUpdateManyWithoutTripInput>
 }
 
-export type SeatScalarWhereInput = {
-  AND?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
-  OR?: Prisma.SeatScalarWhereInput[]
-  NOT?: Prisma.SeatScalarWhereInput | Prisma.SeatScalarWhereInput[]
-  id?: Prisma.IntFilter<"Seat"> | number
-  status?: Prisma.EnumSeatStatusFilter<"Seat"> | $Enums.SeatStatus
-  trip_id?: Prisma.IntFilter<"Seat"> | number
-  created_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"Seat"> | Date | string
+export type SeatCreateManySeat_classInput = {
+  id?: number
+  status: $Enums.SeatStatus
+  trip_id: number
+  created_at?: Date | string
+  updated_at?: Date | string
+}
+
+export type SeatUpdateWithoutSeat_classInput = {
+  status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUpdateOneWithoutSeatNestedInput
+  trip?: Prisma.TripUpdateOneRequiredWithoutSeatsNestedInput
+}
+
+export type SeatUncheckedUpdateWithoutSeat_classInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
+  trip_id?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUncheckedUpdateOneWithoutSeatNestedInput
+}
+
+export type SeatUncheckedUpdateManyWithoutSeat_classInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
+  trip_id?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SeatCreateManyTripInput = {
@@ -539,12 +694,14 @@ export type SeatCreateManyTripInput = {
   status: $Enums.SeatStatus
   created_at?: Date | string
   updated_at?: Date | string
+  seat_class_id: number
 }
 
 export type SeatUpdateWithoutTripInput = {
   status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class?: Prisma.SeatClassUpdateOneRequiredWithoutSeatsNestedInput
   ticket?: Prisma.TicketUpdateOneWithoutSeatNestedInput
 }
 
@@ -553,6 +710,7 @@ export type SeatUncheckedUpdateWithoutTripInput = {
   status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class_id?: Prisma.IntFieldUpdateOperationsInput | number
   ticket?: Prisma.TicketUncheckedUpdateOneWithoutSeatNestedInput
 }
 
@@ -561,6 +719,7 @@ export type SeatUncheckedUpdateManyWithoutTripInput = {
   status?: Prisma.EnumSeatStatusFieldUpdateOperationsInput | $Enums.SeatStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  seat_class_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -571,6 +730,8 @@ export type SeatSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   trip_id?: boolean
   created_at?: boolean
   updated_at?: boolean
+  seat_class_id?: boolean
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   ticket?: boolean | Prisma.Seat$ticketArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["seat"]>
@@ -581,6 +742,8 @@ export type SeatSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   trip_id?: boolean
   created_at?: boolean
   updated_at?: boolean
+  seat_class_id?: boolean
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["seat"]>
 
@@ -590,6 +753,8 @@ export type SeatSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   trip_id?: boolean
   created_at?: boolean
   updated_at?: boolean
+  seat_class_id?: boolean
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["seat"]>
 
@@ -599,23 +764,28 @@ export type SeatSelectScalar = {
   trip_id?: boolean
   created_at?: boolean
   updated_at?: boolean
+  seat_class_id?: boolean
 }
 
-export type SeatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "trip_id" | "created_at" | "updated_at", ExtArgs["result"]["seat"]>
+export type SeatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "trip_id" | "created_at" | "updated_at" | "seat_class_id", ExtArgs["result"]["seat"]>
 export type SeatInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   ticket?: boolean | Prisma.Seat$ticketArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }
 export type SeatIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }
 export type SeatIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  seat_class?: boolean | Prisma.SeatClassDefaultArgs<ExtArgs>
   trip?: boolean | Prisma.TripDefaultArgs<ExtArgs>
 }
 
 export type $SeatPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Seat"
   objects: {
+    seat_class: Prisma.$SeatClassPayload<ExtArgs>
     ticket: Prisma.$TicketPayload<ExtArgs> | null
     trip: Prisma.$TripPayload<ExtArgs>
   }
@@ -625,6 +795,7 @@ export type $SeatPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     trip_id: number
     created_at: Date
     updated_at: Date
+    seat_class_id: number
   }, ExtArgs["result"]["seat"]>
   composites: {}
 }
@@ -1019,6 +1190,7 @@ readonly fields: SeatFieldRefs;
  */
 export interface Prisma__SeatClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  seat_class<T extends Prisma.SeatClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SeatClassDefaultArgs<ExtArgs>>): Prisma.Prisma__SeatClassClient<runtime.Types.Result.GetResult<Prisma.$SeatClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   ticket<T extends Prisma.Seat$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Seat$ticketArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   trip<T extends Prisma.TripDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TripDefaultArgs<ExtArgs>>): Prisma.Prisma__TripClient<runtime.Types.Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1055,6 +1227,7 @@ export interface SeatFieldRefs {
   readonly trip_id: Prisma.FieldRef<"Seat", 'Int'>
   readonly created_at: Prisma.FieldRef<"Seat", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"Seat", 'DateTime'>
+  readonly seat_class_id: Prisma.FieldRef<"Seat", 'Int'>
 }
     
 

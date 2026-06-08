@@ -75,6 +75,11 @@ export type Ticket = Prisma.TicketModel
  */
 export type Seat = Prisma.SeatModel
 /**
+ * Model SeatClass
+ * 
+ */
+export type SeatClass = Prisma.SeatClassModel
+/**
  * Model Trip
  * 
  */

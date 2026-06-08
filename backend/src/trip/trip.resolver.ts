@@ -28,9 +28,12 @@ export class TripResolver{
     seats(@Parent() trip: TripModel){
         return this.seatService.getAllByTripId(trip.id);
     }
-    @ResolveField(()=>SeatStatisticModel)
-    seatStatistic(@Parent() trip: TripModel){
-        return this.seatService.statisticsByTripId(trip.id);
+    @ResolveField(()=>[SeatStatisticModel])
+    async seatStatistic(@Parent() trip: TripModel){
+        
+        const temp = await this.seatService.statisticsByTripId(trip.id);
+        console.log(temp);
+        return temp;
     }
 
     @Mutation(()=> TripModel)

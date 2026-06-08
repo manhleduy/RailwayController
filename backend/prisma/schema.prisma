@@ -95,8 +95,16 @@ model Seat{
   trip_id        Int
   created_at     DateTime   @default(now())
   updated_at     DateTime   @updatedAt
+  seat_class_id  Int
+  seat_class     SeatClass @relation(fields: [seat_class_id], references: [id])
   ticket         Ticket?
   trip           Trip       @relation(fields: [trip_id], references: [id])
+}
+model SeatClass{
+  id             Int        @id @default(autoincrement())
+  name           String
+  price          Float
+  seats          Seat[]
 }
 model Trip{
   id                Int        @id @default(autoincrement())
