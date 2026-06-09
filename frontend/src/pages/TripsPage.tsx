@@ -17,8 +17,9 @@ import { Input } from '@/components/ui/input';
 
 interface Statistic {
   status: string;
-  _count: number;
-  _sum: number;
+  _count: {
+    _all: number;
+  }
 }
 
 interface Trip {
@@ -28,7 +29,7 @@ interface Trip {
   arrival_station: string;
   ETD: string;
   ETA: string;
-  seatStatistic: Statistic[];
+  seatCountByStatus: Statistic[];
 }
 
 interface TripsResponse {
@@ -44,10 +45,11 @@ const GET_TRIPS_QUERY = `
       arrival_station
       ETD
       ETA
-      seatStatistic {
+      seatCountByStatus {
         status
-        _count
-        _sum
+        _count{
+          _all
+        }
       }
     }
   }

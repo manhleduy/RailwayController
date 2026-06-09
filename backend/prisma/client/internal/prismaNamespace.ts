@@ -391,8 +391,8 @@ export const ModelName = {
   Shift: 'Shift',
   Ticket: 'Ticket',
   Seat: 'Seat',
-  SeatClass: 'SeatClass',
-  Trip: 'Trip'
+  Trip: 'Trip',
+  SeatClass: 'SeatClass'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "customer" | "staff" | "order" | "method" | "shift" | "ticket" | "seat" | "seatClass" | "trip"
+    modelProps: "customer" | "staff" | "order" | "method" | "shift" | "ticket" | "seat" | "trip" | "seatClass"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -930,80 +930,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    SeatClass: {
-      payload: Prisma.$SeatClassPayload<ExtArgs>
-      fields: Prisma.SeatClassFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SeatClassFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SeatClassFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        findFirst: {
-          args: Prisma.SeatClassFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SeatClassFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        findMany: {
-          args: Prisma.SeatClassFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
-        }
-        create: {
-          args: Prisma.SeatClassCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        createMany: {
-          args: Prisma.SeatClassCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SeatClassCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
-        }
-        delete: {
-          args: Prisma.SeatClassDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        update: {
-          args: Prisma.SeatClassUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        deleteMany: {
-          args: Prisma.SeatClassDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SeatClassUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SeatClassUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
-        }
-        upsert: {
-          args: Prisma.SeatClassUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
-        }
-        aggregate: {
-          args: Prisma.SeatClassAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSeatClass>
-        }
-        groupBy: {
-          args: Prisma.SeatClassGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SeatClassGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SeatClassCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SeatClassCountAggregateOutputType> | number
-        }
-      }
-    }
     Trip: {
       payload: Prisma.$TripPayload<ExtArgs>
       fields: Prisma.TripFieldRefs
@@ -1075,6 +1001,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TripCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TripCountAggregateOutputType> | number
+        }
+      }
+    }
+    SeatClass: {
+      payload: Prisma.$SeatClassPayload<ExtArgs>
+      fields: Prisma.SeatClassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SeatClassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SeatClassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        findFirst: {
+          args: Prisma.SeatClassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SeatClassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        findMany: {
+          args: Prisma.SeatClassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
+        }
+        create: {
+          args: Prisma.SeatClassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        createMany: {
+          args: Prisma.SeatClassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SeatClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
+        }
+        delete: {
+          args: Prisma.SeatClassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        update: {
+          args: Prisma.SeatClassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        deleteMany: {
+          args: Prisma.SeatClassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SeatClassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SeatClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>[]
+        }
+        upsert: {
+          args: Prisma.SeatClassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeatClassPayload>
+        }
+        aggregate: {
+          args: Prisma.SeatClassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSeatClass>
+        }
+        groupBy: {
+          args: Prisma.SeatClassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeatClassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SeatClassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeatClassCountAggregateOutputType> | number
         }
       }
     }
@@ -1205,15 +1205,6 @@ export const SeatScalarFieldEnum = {
 export type SeatScalarFieldEnum = (typeof SeatScalarFieldEnum)[keyof typeof SeatScalarFieldEnum]
 
 
-export const SeatClassScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  price: 'price'
-} as const
-
-export type SeatClassScalarFieldEnum = (typeof SeatClassScalarFieldEnum)[keyof typeof SeatClassScalarFieldEnum]
-
-
 export const TripScalarFieldEnum = {
   id: 'id',
   track: 'track',
@@ -1224,6 +1215,15 @@ export const TripScalarFieldEnum = {
 } as const
 
 export type TripScalarFieldEnum = (typeof TripScalarFieldEnum)[keyof typeof TripScalarFieldEnum]
+
+
+export const SeatClassScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price'
+} as const
+
+export type SeatClassScalarFieldEnum = (typeof SeatClassScalarFieldEnum)[keyof typeof SeatClassScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1470,8 +1470,8 @@ export type GlobalOmitConfig = {
   shift?: Prisma.ShiftOmit
   ticket?: Prisma.TicketOmit
   seat?: Prisma.SeatOmit
-  seatClass?: Prisma.SeatClassOmit
   trip?: Prisma.TripOmit
+  seatClass?: Prisma.SeatClassOmit
 }
 
 /* Types for Logging */

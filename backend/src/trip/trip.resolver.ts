@@ -3,15 +3,19 @@ import {PrismaService } from "../../prisma/prisma.service";
 import { Query, Args, Mutation, Resolver, ResolveProperty, ResolveField, Parent } from "@nestjs/graphql";
 import { TripModel } from "./model/trip.model";
 import { TripService } from "./trip.service";
-import { SeatService } from "../seat/seat.service";
+import { SeatService } from "../seat/service/seat.service";
 import { SeatModel } from "../seat/model/seat.model";
 import { CreateTripInput } from "./dto/create.dto";
-import { SeatStatisticModel } from "../seat/model/statistic.model";
+import { SeatCountByStatusService } from "../seat/service/count.status.service";
+import { SeatCountByClassService } from "../seat/service/count.class.service";
+import { SeatStatusCountModel, SeatClassCountModel} from "../seat/model";
 @Resolver(()=> TripModel)
 export class TripResolver{
     constructor(
         private readonly tripService: TripService,
-        private readonly seatService: SeatService
+        private readonly seatService: SeatService,
+        private readonly seatCountByStatusService: SeatCountByStatusService,
+        private readonly seatCountByClassService: SeatCountByClassService
     ){}
 
     @Query(()=>TripModel)
@@ -28,13 +32,16 @@ export class TripResolver{
     seats(@Parent() trip: TripModel){
         return this.seatService.getAllByTripId(trip.id);
     }
-    @ResolveField(()=>[SeatStatisticModel])
-    async seatStatistic(@Parent() trip: TripModel){
-        
-        const temp = await this.seatService.statisticsByTripId(trip.id);
-        console.log(temp);
-        return temp;
+    
+    @ResolveField(()=>[SeatStatusCountModel])
+    async seatCountByStatus(@Parent() trip: TripModel){
+        return await this.seatCountByStatusService.statisticsByTripId(trip.id);
     }
+    @ResolveField(()=>[SeatClassCountModel])
+    async seatCountByClass(@Parent() trip: TripModel){
+        return await this.seatCountByClassService.statisticsByTripId(trip.id);
+    }
+
 
     @Mutation(()=> TripModel)
     create(@Args('data', {type: ()=> CreateTripInput}) data: CreateTripInput){

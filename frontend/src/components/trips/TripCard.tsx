@@ -11,8 +11,9 @@ import {
 
 interface Statistic {
   status: string;
-  _count: number;
-  _sum: number;
+  _count: {
+    _all: number;
+  }
 }
 
 interface TripCardProps {
@@ -23,7 +24,7 @@ interface TripCardProps {
     arrival_station: string;
     ETD: string;
     ETA: string;
-    seatStatistic: Statistic[];
+    seatCountByStatus: Statistic[];
   };
 }
 
@@ -100,11 +101,11 @@ function ProgressBar({
 }
 
 export function TripCard({ trip }: TripCardProps) {
-  const totalSeats = trip.seatStatistic.reduce((sum, stat) => sum + stat._count, 0);
+  const totalSeats = trip.seatCountByStatus.reduce((sum, stat) => sum + stat._count._all, 0);
   const availableSeats =
-    trip.seatStatistic.find((stat) => stat.status === 'AVAILABLE')?._count || 0;
+    trip.seatCountByStatus.find((stat) => stat.status === 'AVAILABLE')?._count._all || 0;
   const bookedSeats =
-    trip.seatStatistic.find((stat) => stat.status === 'BOOKED')?._count || 0;
+    trip.seatCountByStatus.find((stat) => stat.status === 'BOOKED')?._count._all || 0;
 
   const availablePercentage = totalSeats > 0 ? (availableSeats / totalSeats) * 100 : 0;
   const bookedPercentage = totalSeats > 0 ? (bookedSeats / totalSeats) * 100 : 0;
@@ -246,7 +247,7 @@ export function TripCard({ trip }: TripCardProps) {
 
               {/* Statistics Grid */}
               <div className="mt-3 grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
-                {trip.seatStatistic.map((stat) => {
+                {trip.seatCountByStatus.map((stat) => {
                   const config = statusConfig[stat.status] || statusConfig.AVAILABLE;
                   const Icon =
                     config.icon === 'check' ? CheckCircle2 : AlertCircle;
@@ -263,7 +264,7 @@ export function TripCard({ trip }: TripCardProps) {
                         {stat.status}
                       </p>
                       <p className="text-sm font-bold text-white mt-1">
-                        {stat._count}
+                        {stat._count._all}
                       </p>
                     </div>
                   );

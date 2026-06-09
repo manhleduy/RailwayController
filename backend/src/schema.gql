@@ -18,7 +18,8 @@ type TripModel {
   ETD: DateTime!
   ETA: DateTime!
   seats: SeatModel!
-  seatStatistic: [SeatStatisticModel!]!
+  seatCountByStatus: [SeatStatusCountModel!]!
+  seatCountByClass: [SeatClassCountModel!]!
 }
 
 """
@@ -30,15 +31,25 @@ type SeatModel {
   id: Float!
   status: String!
   trip_id: Float!
+  seat_class_id: Float!
   created_at: DateTime!
   updated_at: DateTime!
+  seatClass: SeatClassModel!
   ticket: TicketModel!
 }
 
-type SeatStatisticModel {
+type SeatCountModel {
+  _all: Float!
+}
+
+type SeatClassCountModel {
   status: String!
-  _count: Float!
-  _sum: Float!
+  _count: SeatCountModel!
+}
+
+type SeatStatusCountModel {
+  status: String!
+  _count: SeatCountModel!
 }
 
 type TicketModel {
@@ -51,6 +62,12 @@ type TicketModel {
   price: Float!
   created_at: DateTime!
   updated_at: DateTime!
+}
+
+type SeatClassModel {
+  id: Float!
+  name: String!
+  price: Float!
 }
 
 type OrderModel {
@@ -77,11 +94,19 @@ type CustomerModel {
   updated_at: DateTime!
 }
 
+type CustomerOrderCountModel {
+  id: Float!
+}
+
+type CustomerOrderSumModel {
+  id: Float!
+}
+
 type CustomerOrderStatisticModel {
   year: Float!
   month: Float!
-  _sum: Float!
-  _count: Float!
+  _sum: CustomerOrderSumModel!
+  _count: CustomerOrderCountModel!
 }
 
 type TicketStatisticModel {
@@ -90,10 +115,14 @@ type TicketStatisticModel {
   _sum: Float!
 }
 
+type StaffOrderCountModel {
+  id: Float!
+}
+
 type StaffOrderStatisticModel {
   year: Float!
   month: Float!
-  _count: Float!
+  _count: StaffOrderCountModel!
 }
 
 type Query {
@@ -102,6 +131,7 @@ type Query {
   trips: [TripModel!]!
   seat(id: Float!): SeatModel!
   seats(trip_id: Float!): [SeatModel!]!
+  seatClasses: [SeatClassModel!]!
   ticket(id: Float!): TicketModel!
   tickets(orderId: Float!): [TicketModel!]!
   customer(id: String!): CustomerModel!
@@ -154,6 +184,7 @@ input SignupInput {
 
 input CreateSeatInput {
   trip_id: Float!
+  seat_class_id: Float!
 }
 
 input UpdateOrderInput {

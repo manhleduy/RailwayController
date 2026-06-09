@@ -24,7 +24,12 @@ interface Seat {
   status: string;
   trip_id: number;
 }
-
+interface Statistic{
+  status: string;
+  _count: {
+    _all: number;
+  }
+}
 interface Trip {
   id: number;
   track: string;
@@ -33,7 +38,7 @@ interface Trip {
   ETD: string;
   ETA: string;
   seats: Seat[];
-  seatStatistic?: Array<{ status: string; _count: number }>;
+  seatCountByStatus: Statistic[];
 }
 
 interface TripsResponse {
@@ -54,9 +59,11 @@ const GET_TRIPS_WITH_SEATS_QUERY = `
         status
         trip_id
       }
-      seatStatistic {
+      seatCountByStatus {
         status
-        _count
+        _count{
+          _all
+        }
       }
     }
   }

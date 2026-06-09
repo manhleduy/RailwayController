@@ -3,4 +3,7 @@ import { Field, InputType} from "@nestjs/graphql";
 export class CreateSeatInput{
     @Field()
     trip_id!: number;
+
+    @Field()
+    seat_class_id!: number;
 }

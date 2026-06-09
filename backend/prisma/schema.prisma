@@ -4,9 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output = "./client"
-  moduleFormat = "cjs"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -81,7 +79,6 @@ model Ticket{
   order_id       Int
   pass_cccd      String
   pass_name      String
-  price          Float
   status         TicketStatus
   seat_id        Int        @unique
   created_at     DateTime   @default(now())
@@ -100,12 +97,6 @@ model Seat{
   ticket         Ticket?
   trip           Trip       @relation(fields: [trip_id], references: [id])
 }
-model SeatClass{
-  id             Int        @id @default(autoincrement())
-  name           String
-  price          Float
-  seats          Seat[]
-}
 model Trip{
   id                Int        @id @default(autoincrement())
   track             String
@@ -114,4 +105,10 @@ model Trip{
   ETD               DateTime   @db.Time()
   ETA               DateTime   @db.Time()
   seats             Seat[]
+}
+model SeatClass{
+  id             Int        @id @default(autoincrement())
+  name           String
+  price          Float
+  seats          Seat[]
 }

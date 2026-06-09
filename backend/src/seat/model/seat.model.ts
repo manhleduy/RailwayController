@@ -12,6 +12,9 @@ export class SeatModel{
     trip_id!: number;
 
     @Field()
+    seat_class_id!: number;
+
+    @Field()
     created_at!: Date;
 
     @Field()

@@ -2,7 +2,7 @@ import { ObjectType } from "@nestjs/graphql";
 import { Field } from "@nestjs/graphql";
 
 @ObjectType()
-export class CustomerOrderCountModel{
+export class StaffOrderCountModel{
     @Field()
     id!: number;
 }
@@ -16,6 +16,6 @@ export class StaffOrderStatisticModel{
     month!: number;
 
     @Field()
-    _count!: CustomerOrderCountModel;
+    _count!: StaffOrderCountModel;
 
 }

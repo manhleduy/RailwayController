@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver, Query } from "@nestjs/graphql";
 import { PrismaService } from "../../prisma/prisma.service";
 import { StaffService } from "./staff.service";
-import { SeatService } from "../seat/seat.service";
+import { SeatService } from "../seat/service/seat.service";
 import { OrderService } from "../order/order.service";
 import { OrderModel } from "../order/model/order.model";
 import { OrderStatus } from "@prisma/client";

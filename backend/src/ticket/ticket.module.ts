@@ -3,7 +3,7 @@ import {TicketService} from "./ticket.service";
 import {TicketResolver} from "./ticket.resolver";
 import { PrismaService } from "../../prisma/prisma.service";
 import { OrderService } from "../order/order.service";
-import { SeatService } from "../seat/seat.service";
+import { SeatService } from "../seat/service/seat.service";
 @Module({
     
     providers: [

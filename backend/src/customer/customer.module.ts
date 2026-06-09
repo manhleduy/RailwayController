@@ -5,7 +5,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { TripService } from "../trip/trip.service";
 import { OrderService } from "../order/order.service";
 import { TicketService } from "../ticket/ticket.service";
-import { SeatService } from "../seat/seat.service";
+import { SeatService } from "../seat/service/seat.service";
 @Module({
     
     providers: [
