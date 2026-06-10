@@ -54,7 +54,7 @@ export function withDashboard<P extends object>(
 
         try {
           const snapshot = await fetchCustomerDashboard(activeCustomerId, year);
-
+          
           if (!active) {
             return;
           }

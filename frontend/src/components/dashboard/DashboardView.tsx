@@ -132,10 +132,11 @@ export function DashboardView({
   customerId,
   year,
 }: DashboardInjectedProps) {
-  if (loading) {
+  if (loading || !dashboard) {
     return <DashboardSkeleton />;
   }
-
+  console.log(dashboard);
+  
   if (role === 'STAFF') {
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -222,9 +223,10 @@ export function DashboardView({
       </section>
     );
   }
+  console.log(dashboard)
 
-  const orders = dashboard.orders ?? [];
-  const statistics = dashboard.statistic ?? [];
+  const orders = dashboard.customerOrders ?? [];
+  const statistics = dashboard.customerOrderStatistic ?? [];
   const totalSpent = statistics.reduce((sum, item) => sum + (item._sum ?? 0), 0);
   const totalOrders = orders.length || statistics.reduce((sum, item) => sum + item._count, 0);
   const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0;
@@ -430,7 +432,7 @@ export function DashboardView({
                       </span>
                     </td>
                     <td className="py-4 pr-4 font-semibold text-white">
-                      {formatCurrency(order.total_price)}
+                      {formatCurrency(order.ticketStatistic._sum ?? 0)}
                     </td>
                     <td className="py-4 pr-4 text-slate-300">{formatDate(order.created_at)}</td>
                   </tr>

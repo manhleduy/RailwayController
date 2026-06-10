@@ -11,13 +11,10 @@ export class TicketResolver {
     
     }
     @Query(()=> [TicketModel])
-    tickets(@Args('orderId', {type: ()=> Number}) orderId: number){
+    async tickets(@Args('orderId', {type: ()=> Number}) orderId: number){
+        
         return this.ticketService.findAllByOrderId(orderId);
     }
     
-    
-
-
-
-
+   
 }   

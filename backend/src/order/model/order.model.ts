@@ -14,8 +14,7 @@ export  class OrderModel{
     @Field()
     payment_method!: string;
 
-    @Field()
-    total_price!: number;
+
 
     @Field()
     status!: string;

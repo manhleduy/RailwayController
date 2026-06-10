@@ -43,7 +43,6 @@ type TicketRecord = {
 type OrderRecord = {
   id: number;
   customer_id: string;
-  total_price: number;
   payment_method: string;
   created_at: DateTimeString;
   updated_at: DateTimeString;
@@ -87,7 +86,6 @@ const initialTickets: TicketRecord[] = [];
 const initialOrder: OrderRecord = {
   id: 0,
   customer_id: '',
-  total_price: 0,
   payment_method: paymentOptions[0].value,
   created_at: nowIso(),
   updated_at: nowIso(),
@@ -491,7 +489,6 @@ export default function OrderPage() {
     setNextTicketId((current) => current + 1);
     setOrder((current) => ({
       ...current,
-      total_price: current.total_price + TICKET_PRICE,
       updated_at: timestamp,
     }));
   };
@@ -538,7 +535,6 @@ export default function OrderPage() {
 
     setOrder((current) => ({
       ...current,
-      total_price: Math.max(current.total_price - TICKET_PRICE, 0),
       updated_at: timestamp,
     }));
 
@@ -632,7 +628,6 @@ export default function OrderPage() {
         id: createdOrder.id,
         customer_id: createdOrder.customer_id,
         payment_method: createdOrder.payment_method,
-        total_price: createdOrder.total_price,
         created_at: createdOrder.created_at,
         updated_at: savedTimestamp,
       }));

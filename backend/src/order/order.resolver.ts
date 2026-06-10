@@ -34,11 +34,11 @@ export class OrderResolver{
     
 
     @Query(()=>[CustomerOrderStatisticModel])
-    statistic(@Args('data', {type: ()=> StatisticInput}) data: StatisticInput){
+    customerOrderStatistic(@Args('data', {type: ()=> StatisticInput}) data: StatisticInput){
         return this.orderService.userOrderStatisticPerMonth(data.id, data.year);
     }
     @Query(()=>[StaffOrderStatisticModel])
-    staffStatistic(@Args('data', {type: ()=> StatisticInput}) data: StatisticInput){
+    staffOrderStatistic(@Args('data', {type: ()=> StatisticInput}) data: StatisticInput){
         return this.orderService.staffOrderStatisticPerMonth(data.id, data.year);
     }
     

@@ -21,34 +21,28 @@ export class OrderService {
         return orders;
     }
     async userOrderStatisticPerMonth(id: string, year: number){
-        const months = Array.from({ length: 12 }, (_, index) => index + 1);
-
-        return Promise.all(
-            months.map(async (month) => {
-                const aggregate = await this.prisma.order.aggregate({
-                    where: {
-                        customer_id: id,
-                        created_at: {
-                            gte: new Date(year, month - 1, 1),
-                            lt: new Date(year, month, 1)
-                        }
-                    },
-                    _sum:{
-                        total_price: true,
-                    },
-                    _count: {
-                        id: true,
-                    }
-                });
-
-                return {
-                    year,
-                    month,
-                    _sum: aggregate._sum.total_price ?? 0,
-                    _count: aggregate._count.id ?? 0
-                };
-            })
-        );
+        const temp: any = await this.prisma.$queryRaw`
+        SELECT 
+            EXTRACT(MONTH FROM o.created_at) AS month, 
+            COUNT(DISTINCT o.id) AS _count, 
+            SUM(sc.price) as _sum
+        FROM  "Customer" c
+        INNER JOIN "Order" o ON c.id = o.customer_id
+        INNER JOIN "Ticket" t ON o.id = t.order_id
+        INNER JOIN "Seat" s ON t.seat_id = s.id
+        INNER JOIN "SeatClass" sc ON s.seat_class_id = sc.id
+        WHERE c.id = ${id} AND EXTRACT(YEAR FROM o.created_at) = ${year}
+        GROUP BY month
+        ORDER BY month
+        `;
+        
+        return temp.map((item: any) => ({
+            
+            month: item.month,
+            _count: parseInt(item._count ?? 0),
+            _sum: item._sum ?? 0
+        }));
+        
     }
 
     async create(data: CreateOrderInput) {
@@ -59,7 +53,6 @@ export class OrderService {
                 data: {
                     customer_id: data.customer_id,
                     payment_method: data.payment_method,
-                    total_price: (data.tickets?.length ?? 0) * 10000,
                     status: OrderStatus.Pending,
                     created_at: timestamp,
                     updated_at: timestamp,
@@ -74,7 +67,6 @@ export class OrderService {
                             pass_name: input.pass_name,
                             order_id: order.id,
                             seat_id: input.seat_id,
-                            price: 10000,
                             status: TicketStatus.Open,
                             created_at: timestamp,
                             updated_at: timestamp

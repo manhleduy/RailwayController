@@ -75,7 +75,6 @@ type OrderModel {
   customer_id: String!
   staff_id: String
   payment_method: String!
-  total_price: Float!
   status: String!
   created_at: DateTime!
   updated_at: DateTime!
@@ -94,29 +93,19 @@ type CustomerModel {
   updated_at: DateTime!
 }
 
-type CustomerOrderCountModel {
-  id: Float!
-}
-
-type CustomerOrderSumModel {
-  id: Float!
-}
-
 type CustomerOrderStatisticModel {
-  year: Float!
   month: Float!
-  _sum: CustomerOrderSumModel!
-  _count: CustomerOrderCountModel!
+  _sum: Float!
+  _count: Float!
 }
 
 type TicketStatisticModel {
-  status: String!
-  _count: Float!
-  _sum: Float!
+  _count: Float
+  _sum: Float
 }
 
 type StaffOrderCountModel {
-  id: Float!
+  _all: Float!
 }
 
 type StaffOrderStatisticModel {
@@ -138,8 +127,8 @@ type Query {
   customerOrders(id: String!): [OrderModel!]!
   allOrders: [OrderModel!]!
   ordersByCustomerId(id: String!): [OrderModel!]!
-  statistic(data: StatisticInput!): [CustomerOrderStatisticModel!]!
-  staffStatistic(data: StatisticInput!): [StaffOrderStatisticModel!]!
+  customerOrderStatistic(data: StatisticInput!): [CustomerOrderStatisticModel!]!
+  staffOrderStatistic(data: StatisticInput!): [StaffOrderStatisticModel!]!
 }
 
 input LoginInput {

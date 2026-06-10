@@ -17,7 +17,6 @@ export interface CreatedOrder {
   id: number;
   customer_id: string;
   payment_method: string;
-  total_price: number;
   status: string;
   created_at: string;
   updated_at: string;
@@ -37,10 +36,13 @@ export interface DashboardOrder {
   id: number;
   customer_id: string;
   payment_method: string;
-  total_price: number;
   status: string;
   created_at: string;
   updated_at: string;
+  ticketStatistic:{
+    _count: number;
+    _sum: number;
+  }
 }
 
 export interface DashboardStatistic {
@@ -52,18 +54,21 @@ export interface DashboardStatistic {
 
 export interface CustomerDashboardSnapshot {
   customer: DashboardCustomer | null;
-  orders: DashboardOrder[];
-  statistic: DashboardStatistic[];
+  customerOrders: DashboardOrder[];
+  customerOrderStatistic: DashboardStatistic[];
 }
 
 const ORDER_FIELDS = `
   id
   customer_id
-  payment_method
-  total_price
+  payment_method  
   status
   created_at
   updated_at
+  ticketStatistic {
+    _count
+    _sum
+  }
 `;
 
 const CUSTOMER_FIELDS = `
@@ -77,7 +82,6 @@ const CUSTOMER_FIELDS = `
 `;
 
 const STATISTIC_FIELDS = `
-  year
   month
   _sum
   _count
@@ -91,7 +95,7 @@ const CUSTOMER_DASHBOARD_QUERY = `
     customerOrders(id: $id) {
       ${ORDER_FIELDS}
     }
-    statistic(data: { id: $id, year: $year }) {
+    customerOrderStatistic(data: { id: $id, year: $year }) {
       ${STATISTIC_FIELDS}
     }
   }

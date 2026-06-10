@@ -33,9 +33,9 @@ export default function RecentActivityPage() {
         // Fetch dashboard data which includes recent orders
         const dashboard = await fetchCustomerDashboard(user.id, new Date().getFullYear());
 
-        if (dashboard.orders && dashboard.orders.length > 0) {
+        if (dashboard.customerOrders && dashboard.customerOrders.length > 0) {
           // Transform orders into activities
-          const formattedActivities = dashboard.orders.map((order) => ({
+          const formattedActivities = dashboard.customerOrders.map((order) => ({
             id: order.id,
             order_id: order.id,
             type: 'booking' as const,

@@ -28,7 +28,6 @@ const GET_ALL_ORDERS_QUERY = `
       customer_id
       staff_id
       payment_method
-      total_price
       status
       created_at
       updated_at
@@ -43,6 +42,7 @@ const GET_ALL_ORDERS_QUERY = `
       }
       ticketStatistic {
         _count
+        _sum
       }
     }
   }
@@ -55,10 +55,13 @@ const ACCEPT_ORDER_MUTATION = `
       customer_id
       staff_id
       payment_method
-      total_price
       status
       created_at
       updated_at
+      ticketStatistic {
+        _count
+        _sum
+      }
     }
   }
 `;
@@ -70,10 +73,13 @@ const REJECT_ORDER_MUTATION = `
       customer_id
       staff_id
       payment_method
-      total_price
       status
       created_at
       updated_at
+      ticketStatistic {
+        _count
+        _sum
+      }
     }
   }
 `;
@@ -136,7 +142,6 @@ export interface OrderWithTickets {
   customer_id: string;
   staff_id: string | null;
   payment_method: string;
-  total_price: number;
   status: string;
   created_at: string;
   updated_at: string;
@@ -151,6 +156,7 @@ export interface OrderWithTickets {
   }>;
   ticketStatistic: {
     _count: number;
+    _sum?: number;
   };
 }
 

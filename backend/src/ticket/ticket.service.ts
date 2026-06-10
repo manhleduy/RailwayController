@@ -60,37 +60,27 @@ export class TicketService{
         return await this.prisma.ticket.create({
             data:{
                 ...data,
-                price: 10000,
                 status: "Open",
                 created_at: new Date(),
                 updated_at: new Date()
             }
         })
     }
-    async statistic(){
-        return await this.prisma.ticket.groupBy({
-            by: ['status'],
-            _count:{
-                id: true
-            },
-            _sum: {
-                id: true
-            }
-        })
+    
+    async statisticWithOrderId(orderId: number){
+        const temp: any= await this.prisma.$queryRaw`
+        SELECT COUNT(t.order_id) as _count, SUM(sc.price) as _sum
+        FROM "Ticket" t
+        INNER JOIN "Seat" s ON t.seat_id = s.id
+        INNER JOIN "SeatClass" sc On s.seat_class_id = sc.id
+        WHERE t.order_id = ${orderId}
+        GROUP BY t.order_id`
+        return {
+            _count: parseInt(temp[0]?._count ?? 0),
+            _sum: temp[0]?._sum ?? 0
+        }
     }
-    async statisticWithOrderId(id: number){
-        return await this.prisma.ticket.groupBy({
-            by:[ 'status'],
-            where:{
-                order_id: id
-            },
-            _count:{
-                id: true
-            },
-            _sum:{
-                id: true
-            }
-        })
-    }
+    
+    
 
 }

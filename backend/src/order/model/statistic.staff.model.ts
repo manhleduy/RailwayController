@@ -4,7 +4,7 @@ import { Field } from "@nestjs/graphql";
 @ObjectType()
 export class StaffOrderCountModel{
     @Field()
-    id!: number;
+    _all!: number;
 }
 
 @ObjectType()

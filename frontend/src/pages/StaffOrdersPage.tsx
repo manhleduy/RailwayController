@@ -300,7 +300,7 @@ export function StaffOrdersPage() {
                         <div className="text-right">
                           <p className="text-sm text-slate-400">Total</p>
                           <p className="text-lg font-semibold text-white">
-                            {formatCurrency(order.total_price)}
+                            {formatCurrency(order.ticketStatistic._sum ?? 0)}
                           </p>
                         </div>
                         <ChevronDown
